@@ -17,13 +17,22 @@ Deploy with docker: [docker/ReadMe.md](docker/ReadMe.md)
 
 # Development
 
-## Prerequisites
+## Prerequisites:  (Must be installed before beginning Initial Setup)
 
 - PostgreSQL
 - Node
 - NPM
 - Python 3.12
-- pipenv
+- Pipenv 
+- Make
+
+## WINDOWS notes 
+### Make app 
+- `https://gnuwin32.sourceforge.net/packages/make.htm`
+- make-3.81.exe
+- After install, add file location for make.exe to "Path" environment variable.
+### NPM 
+- for npm install, need to add NPM_BIN_PATH = 'npm.cmd'  to 'settings_base.py' file
 
 ## Initial Setup
 
@@ -86,10 +95,6 @@ Load Areas: `./manage.py load_areas path/to/areas.csv --verbose`
 Load Staff: `./manage.py load_staff path/to/staff.csv --verbose`
 > Development: Set `DEV_LOAD_STAFF_CSV` in `.env` and it will be loaded during `make init_dev`.
 
-## Reference make app (for windows)
-
-- `https://gnuwin32.sourceforge.net/packages/make.htm`
-- Add file location for make.exe to "Path" environment variable.
 
 ## Resources
 
