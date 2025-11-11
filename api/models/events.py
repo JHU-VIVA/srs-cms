@@ -107,7 +107,6 @@ class Event(QueryExtensionMixin, models.Model):
     staff_code = models.CharField(max_length=255, blank=True, null=True)
     submission_date = models.DateField(blank=True, null=True)
     interview_date = models.DateField(blank=True, null=True)
-    # event_date = models.DateField(blank=True, null=True)  #TODO:REMOVE Check
     event_type = models.IntegerField(choices=EventType.choices, null=True)
     event_register = models.IntegerField(choices=EventRegisterType.choices, null=True)
     consent = models.IntegerField(choices=YesNo.choices, null=True)
@@ -125,10 +124,6 @@ class Event(QueryExtensionMixin, models.Model):
     respondent_name = models.CharField(max_length=255, blank=True, null=True)
     event_location = models.IntegerField(choices=EventLocationType.choices, null=True)
 
-    # common all event types
-    #event_person_name = models.CharField(max_length=255, blank=True, null=True)  #TODO:REMOVE check
-    #person_age = models.IntegerField(null=True)  #TODO:REMOVE
-
     # common pregnancy and pregnancy outcome
     health_card = models.IntegerField(choices=HealthCardSeen.choices, null=True)
     mother_name = models.CharField(max_length=255, blank=True, null=True)
@@ -140,15 +135,13 @@ class Event(QueryExtensionMixin, models.Model):
     edd_date = models.DateField(blank=True, null=True)
 
     # death only
-    dec_person_name = models.CharField(max_length=255, blank=True, null=True)
+    deceased_person_name = models.CharField(max_length=255, blank=True, null=True)
     death_date = models.DateField(blank=True, null=True)
-    dec_sex = models.IntegerField(choices=SexType.choices, null=True)
-#    sex = models.IntegerField(choices=SexType.choices, null=True) #TODO: REMOVE
-    dec_age_val = models.IntegerField(null=True)
+    deceased_sex = models.IntegerField(choices=SexType.choices, null=True)
+    deceased_age = models.IntegerField(null=True)
     age_unit = models.CharField(choices=AgeUnitType.choices, null=True)
     dob_known = models.IntegerField(choices=YesNo.choices, null=True)
     dob_date = models.DateField(blank=True, null=True)
-    dec_best_dob_date = models.DateField(blank=True, null=True)
     age_in_days = models.CharField(max_length=255, blank=True, null=True)
     age_in_years = models.CharField(max_length=255, blank=True, null=True)
     age_in_years_remain = models.CharField(max_length=255, blank=True, null=True)
@@ -217,7 +210,7 @@ class Event(QueryExtensionMixin, models.Model):
             # For text search.
             GinIndex(fields=['household_head_name'], name='events_gin_household_head_name',
                      opclasses=['gin_trgm_ops']),
-            GinIndex(fields=['dec_person_name'], name='events_gin_dec_person_name',
+            GinIndex(fields=['deceased_person_name'], name='events_gin_dec_person_name',
                      opclasses=['gin_trgm_ops']),
             GinIndex(fields=['respondent_name'], name='events_gin_respondent_name',
                      opclasses=['gin_trgm_ops']),

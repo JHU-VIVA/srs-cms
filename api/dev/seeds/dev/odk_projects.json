@@ -21,7 +21,7 @@
         "name": "Events",
         "xml_form_id": "event_2024",
         "version": "2024091201",
-        "is_enabled": true,
+        "is_enabled": false,
         "odk_form_importers": [
           {
             "import_order": 1,
@@ -47,7 +47,7 @@
         "name": "Events",
         "xml_form_id": "event_2024",
         "version": "2024111601",
-        "is_enabled": true,
+        "is_enabled": false,
         "odk_form_importers": [
           {
             "import_order": 1,
@@ -73,7 +73,7 @@
         "name": "Events",
         "xml_form_id": "event_2024",
         "version": "2025040103",
-        "is_enabled": true,
+        "is_enabled": false,
         "odk_form_importers": [
           {
             "import_order": 1,
@@ -125,7 +125,7 @@
         "name": "Households",
         "xml_form_id": "household_2024",
         "version": "2024111601",
-        "is_enabled": true,
+        "is_enabled": false,
         "odk_form_importers": [
           {
             "import_order": 1,

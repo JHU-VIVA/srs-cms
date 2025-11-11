@@ -176,7 +176,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_cluster.cluster_id",
+        "source_name": "cluster_id",
         "target_name": "cluster_code",
         "target_type": "str",
         "default": null,
@@ -186,7 +186,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_area.area_id",
+        "source_name": "area_id",
         "target_name": "area_code",
         "target_type": "str",
         "default": null,
@@ -196,7 +196,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_area.worker_id",
+        "source_name": "staff_id",
         "target_name": "staff_code",
         "target_type": "str",
         "default": null,
@@ -357,7 +357,7 @@
       },
       {
         "source_name": "grp_consent.dec_person_name",
-        "target_name": "dec_person_name",
+        "target_name": "deceased_person_name",
         "target_type": "str",
         "default": null,
         "transform": null,
@@ -396,7 +396,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.event_date",
+        "source_name": "grp_consent.death_date",
         "target_name": "death_date",
         "target_type": "date",
         "default": null,
@@ -406,7 +406,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.dob_known",
+        "source_name": "grp_consent.dec_dob_known",
         "target_name": "dob_known",
         "target_type": "int",
         "default": null,
@@ -416,7 +416,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.dob_date",
+        "source_name": "grp_consent.dec_best_dob_date",
         "target_name": "dob_date",
         "target_type": "date",
         "default": null,
@@ -426,7 +426,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.age_in_days",
+        "source_name": "grp_consent.dec_age_in_days",
         "target_name": "age_in_days",
         "target_type": "str",
         "default": null,
@@ -436,7 +436,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.age_in_years",
+        "source_name": "grp_consent.dec_age_in_years",
         "target_name": "age_in_years",
         "target_type": "str",
         "default": null,
@@ -446,7 +446,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.age_in_years_remain",
+        "source_name": "grp_consent.dec_age_in_years_remain",
         "target_name": "age_in_years_remain",
         "target_type": "str",
         "default": null,
@@ -456,7 +456,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.age_in_months",
+        "source_name": "grp_consent.dec_age_in_months",
         "target_name": "age_in_months",
         "target_type": "str",
         "default": null,
@@ -466,7 +466,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.age_in_months_remain",
+        "source_name": "grp_consent.dec_age_in_months_remain",
         "target_name": "age_in_months_remain",
         "target_type": "str",
         "default": null,
@@ -507,7 +507,7 @@
       },
       {
         "source_name": "grp_consent.dec_age_val",
-        "target_name": "dec_age_val",
+        "target_name": "deceased_age",
         "target_type": "int",
         "default": null,
         "transform": null,
@@ -516,8 +516,28 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.grp_age.age_unit",
+        "source_name": "grp_consent.dec_age_unit",
         "target_name": "age_unit",
+        "target_type": "int",
+        "default": null,
+        "transform": null,
+        "is_primary_key": false,
+        "is_enabled": true,
+        "is_required": true
+      },
+      {
+        "source_name": "grp_consent.mother_name",
+        "target_name": "mother_name",
+        "target_type": "str",
+        "default": null,
+        "transform": null,
+        "is_primary_key": false,
+        "is_enabled": true,
+        "is_required": true
+      },
+      {
+        "source_name": "grp_consent.mother_age_years",
+        "target_name": "mother_age_years",
         "target_type": "int",
         "default": null,
         "transform": null,
@@ -556,8 +576,18 @@
         "is_required": true
       },
       {
+        "source_name": "grp_consent.preg_outcome_date",
+        "target_name": "preg_outcome_date",
+        "target_type": "date",
+        "default": null,
+        "transform": null,
+        "is_primary_key": false,
+        "is_enabled": true,
+        "is_required": true
+      },
+      {
         "source_name": "grp_consent.dec_sex",
-        "target_name": "dec_sex",
+        "target_name": "deceased_sex",
         "target_type": "int",
         "default": null,
         "transform": null,
@@ -706,7 +736,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.head_phone_poss",
+        "source_name": "head_phone_poss",
         "target_name": "head_phone_cell",
         "target_type": "int",
         "default": null,
@@ -716,7 +746,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.head_phone_allow",
+        "source_name": "head_phone_allow",
         "target_name": "head_phone_allow",
         "target_type": "int",
         "default": null,
@@ -726,7 +756,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.head_phone",
+        "source_name": "head_phone",
         "target_name": "head_phone",
         "target_type": "str",
         "default": null,
@@ -736,7 +766,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.head_phone_conf",
+        "source_name": "head_phone_conf",
         "target_name": "head_phone_confirm",
         "target_type": "str",
         "default": null,
@@ -746,7 +776,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.res_phone_poss",
+        "source_name": "res_phone_poss",
         "target_name": "res_phone_cell",
         "target_type": "int",
         "default": null,
@@ -756,7 +786,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.res_phone_allow",
+        "source_name": "res_phone_allow",
         "target_name": "res_phone_allow",
         "target_type": "int",
         "default": null,
@@ -766,7 +796,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.res_phone",
+        "source_name": "res_phone",
         "target_name": "res_phone",
         "target_type": "str",
         "default": null,
@@ -776,7 +806,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.res_phone_conf",
+        "source_name": "res_phone_conf",
         "target_name": "res_phone_confirm",
         "target_type": "str",
         "default": null,
@@ -786,7 +816,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.any_phone_poss",
+        "source_name": "any_phone_poss",
         "target_name": "any_phone_cell",
         "target_type": "int",
         "default": null,
@@ -796,7 +826,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.any_phone_allow",
+        "source_name": "any_phone_allow",
         "target_name": "any_phone_allow",
         "target_type": "int",
         "default": null,
@@ -806,7 +836,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.any_phone_name",
+        "source_name": "any_phone_name",
         "target_name": "any_phone_name",
         "target_type": "str",
         "default": null,
@@ -816,7 +846,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.any_phone",
+        "source_name": "any_phone",
         "target_name": "any_phone",
         "target_type": "str",
         "default": null,
@@ -826,7 +856,7 @@
         "is_required": true
       },
       {
-        "source_name": "phone_cont.any_phone_conf",
+        "source_name": "any_phone_conf",
         "target_name": "any_phone_confirm",
         "target_type": "str",
         "default": null,

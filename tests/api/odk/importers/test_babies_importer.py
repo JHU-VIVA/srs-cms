@@ -1,4 +1,4 @@
-maimport pytest
+import pytest
 from api.odk.importers.form_submissions.babies_importer import BabiesImporter
 from api.odk.importers.form_submissions.form_submission_importer_factory import FromSubmissionImporterFactory
 from api.models import Event, Baby

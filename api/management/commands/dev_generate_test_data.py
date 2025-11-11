@@ -36,8 +36,7 @@ class Command(BaseCommand):
 
         dob = self.fake.date_of_birth(minimum_age=0, maximum_age=65)
         dod = self.fake.date_this_month(before_today=True, after_today=True)
-        #person_age = dod.year - dob.year - ((dod.month, dod.day) < (dob.month, dob.day))
-        dec_age_val = (dod - dob).days
+        deceased_age = (dod - dob).days
         lat_lang = self.fake.local_latlng()
 
         event = Event.objects.create(
@@ -53,17 +52,18 @@ class Command(BaseCommand):
             visit_type=Event.VisitType.ROUTINE_VISIT,
             consent_type=Event.ConsentType.GENERAL,
             visit_method=Event.VisitMethod.HOME_VISIT,
-            # event_person_name=self.fake.name(),
+            deceased_person_name=self.fake.name(),
+            mother_name=self.fake.name(),
             respondent_name=self.fake.name(),
             household_head_name=self.fake.name(),
             household_address=self.fake.street_address(),
-            sex=self.fake.random_element(Death.SexType),
+            deceased_sex=self.fake.random_element(Death.SexType),
             dob_date=dob,
             death_date=dod,
-            # person_age=person_age,
-            dec_age_val=dec_age_val,
+            deceased_age=deceased_age,
             deceased_mother_name=self.fake.name(),
             deceased_father_name=self.fake.name(),
+            preg_outcome_date=datetime.today(),
             gps_latitude=lat_lang[0],
             gps_longitude=lat_lang[1],
             gps_altitude=round(random.uniform(0, 5000), 2),
@@ -80,12 +80,11 @@ class Command(BaseCommand):
             death_status=self.fake.random_element(Death.DeathStatus),
             death_type=self.fake.random_element(Death.DeathType),
             va_proposed_date=event.va_proposed_date,
-            deceased_name=event.dec_person_name,
-            deceased_sex=event.sex,
+            deceased_name=event.deceased_person_name,
+            deceased_sex=event.deceased_sex,
             deceased_dob=event.dob_date,
             deceased_dod=event.death_date,
-            deceased_age=event.dec_age_val,
-            # deceased_age=event.person_age,
+            deceased_age=event.deceased_age,
             deceased_mother_name=event.deceased_mother_name,
             deceased_father_name=event.deceased_father_name,
         )

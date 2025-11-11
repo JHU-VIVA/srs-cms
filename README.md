@@ -23,26 +23,32 @@ Deploy with docker: [docker/ReadMe.md](docker/ReadMe.md)
 - Node
 - NPM
 - Python 3.12
-- Pipenv 
+- Pipenv
 - Make
 
-## WINDOWS notes 
-### Make app 
+## WINDOWS notes
+
+### Make app
+
 - `https://gnuwin32.sourceforge.net/packages/make.htm`
 - make-3.81.exe
 - After install, add file location for make.exe to "Path" environment variable.
-### NPM 
-- for npm install, need to add NPM_BIN_PATH = 'npm.cmd'  to 'settings_base.py' file
+
+### NPM
+
+- For npm install, you may need to set `NPM_BIN_PATH=path/to/npm` in your `.env.` file.
 
 ## Initial Setup
 
-1. Run `make pip_install`
-2. Run `make npm_install`
-3. Copy `.env.template` to `.env`.
-4. Edit `.env` and set the variables for your environment.
-5. Run `make database` (for linux, or see below for Windows)
-6. Run `make migrate`
-7. Run `make createsuperuser`
+1. Create virtual environment: `pipenv --python 3.12`
+2. Activate virtual environment: `pipenv shell`
+3. Run `make pip_install`
+4. Run `make npm_install`
+5. Copy `.env.template` to `.env`.
+6. Edit `.env` and set the variables for your environment.
+7. Run `make database` (for linux, or see below for Windows)
+8. Run `make migrate`
+9. Run `make createsuperuser`
 
 ### Make Database - Windows
 
@@ -94,7 +100,6 @@ Load Areas: `./manage.py load_areas path/to/areas.csv --verbose`
 
 Load Staff: `./manage.py load_staff path/to/staff.csv --verbose`
 > Development: Set `DEV_LOAD_STAFF_CSV` in `.env` and it will be loaded during `make init_dev`.
-
 
 ## Resources
 

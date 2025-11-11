@@ -17,7 +17,7 @@
     <div class="container mx-auto py-4">
         <h1 class="text-2xl font-bold mb-5">Death Management</h1>
 
-        <form method="post" class="w-full max-w-sm">
+        <form method="post" class="w-full max-w-lg">
             {% csrf_token %}
             {% include "client/widgets/form_layout.html" with form=form %}
             <div class="flex justify-end mt-4 space-x-2">

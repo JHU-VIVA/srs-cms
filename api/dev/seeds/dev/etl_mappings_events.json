@@ -357,7 +357,7 @@
       },
       {
         "source_name": "grp_consent.dec_person_name",
-        "target_name": "dec_person_name",
+        "target_name": "deceased_person_name",
         "target_type": "str",
         "default": null,
         "transform": null,
@@ -517,7 +517,7 @@
       },
       {
         "source_name": "grp_consent.dec_age_val",
-        "target_name": "dec_age_val",
+        "target_name": "deceased_age",
         "target_type": "int",
         "default": null,
         "transform": null,
@@ -577,7 +577,7 @@
       },
       {
         "source_name": "grp_consent.dec_sex",
-        "target_name": "dec_sex",
+        "target_name": "deceased_sex",
         "target_type": "int",
         "default": null,
         "transform": null,
@@ -991,7 +991,14 @@
         "target_name": "device_code",
         "target_type": "str",
         "default": null,
-        "transform": "{\"name\": \"replace\", \"args\": [\"collect:\", \"\"], \"kwargs\": null }",
+        "transform": {
+          "name": "replace",
+          "args": [
+            "collect:",
+            ""
+          ],
+          "kwargs": null
+        },
         "is_primary_key": false,
         "is_enabled": true,
         "is_required": true
@@ -1228,7 +1235,7 @@
       },
       {
         "source_name": "grp_consent.dec_person_name",
-        "target_name": "dec_person_name",
+        "target_name": "deceased_person_name",
         "target_type": "str",
         "default": null,
         "transform": null,
@@ -1388,7 +1395,7 @@
       },
       {
         "source_name": "grp_consent.dec_age_val",
-        "target_name": "dec_age_val",
+        "target_name": "deceased_age",
         "target_type": "int",
         "default": null,
         "transform": null,
@@ -1448,7 +1455,7 @@
       },
       {
         "source_name": "grp_consent.dec_sex",
-        "target_name": "dec_sex",
+        "target_name": "deceased_sex",
         "target_type": "int",
         "default": null,
         "transform": null,
@@ -1862,7 +1869,14 @@
         "target_name": "device_code",
         "target_type": "str",
         "default": null,
-        "transform": "{\"name\": \"replace\", \"args\": [\"collect:\", \"\"], \"kwargs\": null }",
+        "transform": {
+          "name": "replace",
+          "args": [
+            "collect:",
+            ""
+          ],
+          "kwargs": null
+        },
         "is_primary_key": false,
         "is_enabled": true,
         "is_required": true
@@ -2099,7 +2113,7 @@
       },
       {
         "source_name": "grp_consent.dec_person_name",
-        "target_name": "dec_person_name",
+        "target_name": "deceased_person_name",
         "target_type": "str",
         "default": null,
         "transform": null,
@@ -2249,7 +2263,7 @@
       },
       {
         "source_name": "grp_consent.dec_age_val",
-        "target_name": "dec_age_val",
+        "target_name": "deceased_age",
         "target_type": "int",
         "default": null,
         "transform": null,
@@ -2329,7 +2343,7 @@
       },
       {
         "source_name": "grp_consent.dec_sex",
-        "target_name": "dec_sex",
+        "target_name": "deceased_sex",
         "target_type": "int",
         "default": null,
         "transform": null,
@@ -2743,7 +2757,14 @@
         "target_name": "device_code",
         "target_type": "str",
         "default": null,
-        "transform": "{\"name\": \"replace\", \"args\": [\"collect:\", \"\"], \"kwargs\": null }",
+        "transform": {
+          "name": "replace",
+          "args": [
+            "collect:",
+            ""
+          ],
+          "kwargs": null
+        },
         "is_primary_key": false,
         "is_enabled": true,
         "is_required": true
@@ -2980,7 +3001,7 @@
       },
       {
         "source_name": "grp_consent.dec_person_name",
-        "target_name": "dec_person_name",
+        "target_name": "deceased_person_name",
         "target_type": "str",
         "default": null,
         "transform": null,
@@ -3130,7 +3151,7 @@
       },
       {
         "source_name": "grp_consent.dec_age_val",
-        "target_name": "dec_age_val",
+        "target_name": "deceased_age",
         "target_type": "int",
         "default": null,
         "transform": null,
@@ -3210,7 +3231,7 @@
       },
       {
         "source_name": "grp_consent.dec_sex",
-        "target_name": "dec_sex",
+        "target_name": "deceased_sex",
         "target_type": "int",
         "default": null,
         "transform": null,

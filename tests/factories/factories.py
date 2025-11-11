@@ -22,6 +22,7 @@ fake = Faker()
 class EtlDocumentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = EtlDocument
+        skip_postgeneration_save = True
 
     name = 'ETL Doc {}'.format(uuid.uuid4())
     version = 'v{}'.format(uuid.uuid4())
@@ -73,6 +74,7 @@ class OdkProjectFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OdkProject
         exclude = ("ODK_FORM_NAME_FOR_EVENTS", "ODK_FORM_NAME_FOR_HOUSEHOLDS", "ODK_FORM_NAME_FOR_VERBAL_AUTOPSIES")
+        skip_postgeneration_save = True
 
     name = 'ODK Project {}'.format(uuid.uuid4())
     project_id = factory.Sequence(lambda n: n)
@@ -141,6 +143,7 @@ class OdkProjectFactory(factory.django.DjangoModelFactory):
 class OdkFormFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OdkForm
+        skip_postgeneration_save = True
 
     odk_project = factory.SubFactory(OdkProjectFactory)
     name = 'ODK Form {}'.format(uuid.uuid4())
@@ -187,6 +190,7 @@ class OdkFormImporterFactory(factory.django.DjangoModelFactory):
 class ProvinceFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Province
+        skip_postgeneration_save = True
 
     _codes = [f"{a}{b}" for a, b in itertools.product(string.ascii_uppercase, repeat=2)]
     code = factory.Iterator(_codes)
@@ -222,6 +226,7 @@ class ProvinceFactory(factory.django.DjangoModelFactory):
 class ClusterFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Cluster
+        skip_postgeneration_save = True
 
     _codes = [f"{a}{b}" for a, b in itertools.product(string.ascii_uppercase, repeat=2)]
     code = factory.LazyFunction(lambda: f"{random.randint(0, 9999):04d}{random.choice(ClusterFactory._codes)}")
@@ -266,6 +271,7 @@ class StaffFactory(factory.django.DjangoModelFactory):
 class EventFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Event
+        skip_postgeneration_save = True
 
     cluster = factory.SubFactory(ClusterFactory)
     area = factory.SubFactory(AreaFactory)
@@ -280,10 +286,9 @@ class EventFactory(factory.django.DjangoModelFactory):
     consent_type = Event.ConsentType.GENERAL
     visit_method = Event.VisitMethod.HOME_VISIT
     respondent_name = fake.name()
-    dec_person_name = fake.name()
+    deceased_person_name = fake.name()
     mother_name = fake.name()
-    dec_age_val = 1
-    # person_age = 1
+    deceased_age = 1
     event_location = Event.EventLocationType.HOME
 
     @factory.post_generation
@@ -349,13 +354,9 @@ class FormSubmissionFactory(factory.Factory):
                 "submitterId": _staff.id,
                 "submitterName": fake.name(),
             },
-            "grp_area": {
-                "area_id": _area.code if _area else "AB123",
-                "worker_id": _staff.code if _staff else "T123",
-            },
-            "grp_cluster": {
-                "cluster_id": _cluster.code if _cluster else "1234AB",
-            },
+            "cluster_id": _cluster.code if _cluster else "1234AB",
+            "area_id": _area.code if _area else "AB123",
+            "staff_id": _staff.code if _staff else "T123",
             "meta": {
                 "instanceID": f"uuid:{uuid.uuid4()}",
                 "instanceName": str(uuid.uuid4())
@@ -388,11 +389,12 @@ class FormSubmissionFactory(factory.Factory):
             death_props = {
                 "grp_consent": {
                     "event_type": Event.EventType.DEATH.value,
-                    "age_in_days": "2",
+                    "dec_age_in_days": "2",
                     "dec_father_name": fake.name(),
                     "dec_mother_name": fake.name(),
-                    "dob_date": Utils.to_date_string(fake.date_this_month(before_today=True, after_today=False)),
-                    "dob_known": Event.YesNo.YES.value,
+                    "dec_person_name": fake.name(),
+                    "dec_dob_date": Utils.to_date_string(fake.date_this_month(before_today=True, after_today=False)),
+                    "dec_dob_known": Event.YesNo.YES.value,
                     "is_neonatal": True
                 }
             }
@@ -403,9 +405,9 @@ class FormSubmissionFactory(factory.Factory):
             baby_props = {
                 "grp_consent": {
                     "event_type": Event.EventType.PREGNANCY.value,
-                    "age_in_days": "2",
-                    "dob_date": Utils.to_date_string(fake.date_this_month(before_today=True, after_today=False)),
-                    "dob_known": Event.YesNo.YES.value,
+                    "dec_age_in_days": "2",
+                    "dec_dob_date": Utils.to_date_string(fake.date_this_month(before_today=True, after_today=False)),
+                    "dec_dob_known": Event.YesNo.YES.value,
                     "baby_ct": "1",
                     "baby_rep": []
                 }
@@ -464,8 +466,6 @@ class FormSubmissionFactory(factory.Factory):
                 "instanceID": f"uuid:{uuid.uuid4()}",
                 "instanceName": str(uuid.uuid4())
             },
-            "event_date": event_date,
-            "event_person_name": fake.name(),
             "today_date": event_date,
             "gps": {
                 "coordinates": [-115, 36, 585],
@@ -484,11 +484,9 @@ class FormSubmissionFactory(factory.Factory):
             "hh_head_name": fake.name(),
             "hh_id": "123",
             "resp_name": fake.name(),
-            "grp_age": {
-                "age_unit": "",
-                "person_age": "1"
-            },
             "grp_consent": {
+                "dec_age_unit": "",
+                "dec_age_val": "1",
                 "consent": Household.ConsentType.YES.value,
                 "grp_phone_cont": {
                     "any_phone": fake.phone_number(),

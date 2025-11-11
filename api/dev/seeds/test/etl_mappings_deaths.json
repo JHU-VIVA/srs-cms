@@ -52,7 +52,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.dob_date",
+        "source_name": "grp_consent.dec_best_dob_date",
         "target_name": "deceased_dob",
         "target_type": "date",
         "default": null,
@@ -62,7 +62,7 @@
         "is_required": true
       },
       {
-        "source_name": "grp_consent.event_date",
+        "source_name": "grp_consent.death_date",
         "target_name": "deceased_dod",
         "target_type": "date",
         "default": null,
