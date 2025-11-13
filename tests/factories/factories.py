@@ -12,7 +12,7 @@ from api.models import (OdkProject, OdkForm, EtlDocument, EtlMapping,
                         VerbalAutopsy,
                         OdkFormImporter)
 from api.common import Utils, TypeCaster
-from api.dev.seeds.seed_loader import SeedLoader
+from api.data.seeds.seed_loader import SeedLoader
 from api.odk.importers.form_submissions.form_submission_importer_factory import FromSubmissionImporterFactory
 from faker import Faker
 
@@ -50,7 +50,7 @@ class EtlDocumentFactory(factory.django.DjangoModelFactory):
                 etl_mapping_filename = 'etl_mappings_verbal_autopsies.json'
             else:
                 raise Exception('Unknown importer: {}'.format(importer))
-            SeedLoader('test').load_etl_mappings(etl_mapping_filename, self.id)
+            SeedLoader(SeedLoader.TEST).load_etl_mappings(etl_mapping_filename, self.id)
         self.refresh_from_db()
 
 

@@ -2,12 +2,18 @@ import psycopg2
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
 from config.env import Env
+from api.data.seeds.seed_loader import SeedLoader
 
 
 class Command(BaseCommand):
-    help = 'Initialize the Development Database.'
+    help = 'Initialize the Database.'
 
     def add_arguments(self, parser):
+        parser.add_argument('-e', '--env',
+                            default=SeedLoader.DEV,
+                            choices=SeedLoader.ENVS,
+                            help='Which environment files to use.')
+
         parser.add_argument(
             '--migrate',
             action='store_true',
@@ -32,6 +38,7 @@ class Command(BaseCommand):
                             help='Load test data.')
 
     def handle(self, *args, **kwargs):
+        env = kwargs['env']
         migrate = kwargs['migrate']
         kill_connections = kwargs['kill_connections']
         seed = kwargs['seed']
@@ -42,34 +49,32 @@ class Command(BaseCommand):
         else:
             self.db_kill_connections()
 
-            if self.db_exists():
+            if self.db_exists() and env == SeedLoader.DEV:
                 self.stdout.write(self.style.SUCCESS("Database {} exists. Dropping...".format(self.db_name)))
                 self.drop_database()
 
             if not self.db_exists():
-                self.stdout.write(
-                    self.style.SUCCESS("Database {} does not exist. Creating...").format(self.db_name))
+                self.stdout.write(self.style.SUCCESS("Database {} does not exist. Creating...").format(self.db_name))
                 self.create_database()
             else:
-                self.stdout.write(self.style.ERROR("Database {} still exists..".format(self.db_name)))
+                if env == SeedLoader.DEV:
+                    self.stdout.write(self.style.ERROR("Database {} still exists..".format(self.db_name)))
+                else:
+                    self.stdout.write(self.style.SUCCESS("Database {} exists..".format(self.db_name)))
 
             if self.db_exists():
                 if migrate:
                     self.stdout.write(self.style.SUCCESS("Running migrations..."))
                     call_command("migrate")
                     self.stdout.write(self.style.SUCCESS("Database initialization completed with migrations."))
-                else:
-                    self.stdout.write(self.style.WARNING("Database initialization completed without migrations."))
 
                 if seed:
                     self.stdout.write(self.style.SUCCESS("Seeding Database..."))
+                    call_args = ["seed_database", "--env", env]
                     if with_test_data:
-                        call_command("dev_seed_database", "--with-test-data")
-                    else:
-                        call_command("dev_seed_database")
+                        call_args.append("--with-test-data")
+                    call_command(*call_args)
                     self.stdout.write(self.style.SUCCESS("Database initialization completed with seeding."))
-                else:
-                    self.stdout.write(self.style.WARNING("Database initialization completed without seeding."))
 
     @property
     def db_host(self):

@@ -34,6 +34,7 @@ class EtlDocument(QueryExtensionMixin, models.Model):
     source_root = models.CharField(
         max_length=255,
         null=True,
+        blank=True,
         help_text='Path to root object to ETL. If null the document will be used as root.'
     )
 
@@ -73,10 +74,12 @@ class EtlMapping(QueryExtensionMixin, models.Model):
     default = models.CharField(
         max_length=255,
         null=True,
+        blank=True,
         help_text='Default value for the target table column value if the source value is falsey.'
     )
     transform = models.JSONField(
         null=True,
+        blank=True,
         help_text='Transformer configuration for this field.'
     )
     is_primary_key = models.BooleanField(

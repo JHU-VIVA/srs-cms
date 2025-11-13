@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from api.dev.seeds.seed_loader import SeedLoader
+from api.data.seeds.seed_loader import SeedLoader
 
 
 class Command(BaseCommand):
@@ -7,9 +7,9 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('-e', '--env',
-                            default='dev',
+                            default=SeedLoader.DEV,
                             choices=SeedLoader.ENVS,
-                            help='Run migrations')
+                            help='Which environment files to use.')
 
         parser.add_argument('--with-test-data',
                             default=False,

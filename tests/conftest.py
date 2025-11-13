@@ -1,5 +1,5 @@
 import pytest
-from api.dev.seeds.seed_loader import SeedLoader
+from api.data.seeds.seed_loader import SeedLoader
 from api.models import OdkProject
 
 
@@ -11,7 +11,7 @@ def auto_set_env(monkeypatch):
 
 @pytest.fixture(scope="session")
 def seed_loader():
-    yield SeedLoader('test')
+    yield SeedLoader(SeedLoader.TEST)
 
 
 @pytest.fixture()

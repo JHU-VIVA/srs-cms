@@ -113,6 +113,7 @@ class UserAdmin(UserAdmin):
     add_fieldsets = UserAdmin.add_fieldsets + (
         (None, {'fields': ('provinces',)}),
     )
+    ordering = ['id']
     list_display = (
         "id",
         "username",
@@ -136,6 +137,7 @@ class UserAdmin(UserAdmin):
         "provinces__name",
         "provinces__code",
     )
+    list_display_links = ['id', 'username']
 
 
 # ODK
@@ -231,6 +233,7 @@ class OdkProjectAdmin(AdminImportFileBaseAdmin):
 
         return redirect('..')
 
+    ordering = ['id']
     list_display = (
         'id',
         'name',
@@ -244,10 +247,15 @@ class OdkProjectAdmin(AdminImportFileBaseAdmin):
         'name',
         'project_id',
     )
+    list_display_links = (
+        'id',
+        'name'
+    )
 
 
 @admin.register(OdkForm)
 class OdkFormAdmin(admin.ModelAdmin):
+    ordering = ['id']
     list_display = (
         'id',
         'name',
@@ -265,10 +273,15 @@ class OdkFormAdmin(admin.ModelAdmin):
         'xml_form_id',
         'version',
     )
+    list_display_links = (
+        'id',
+        'name'
+    )
 
 
 @admin.register(OdkFormImporter)
 class OdkFormImporterAdmin(admin.ModelAdmin):
+    ordering = ['odk_form__name', 'odk_form__version', 'id']
     list_display = (
         'id',
         'importer',
@@ -288,10 +301,15 @@ class OdkFormImporterAdmin(admin.ModelAdmin):
         'odk_form__name',
         'odk_form__version',
     )
+    list_display_links = (
+        'id',
+        'importer'
+    )
 
 
 @admin.register(OdkFormImporterJob)
 class OdkFormImporterJobAdmin(admin.ModelAdmin):
+    ordering = ['-import_start_date', '-id']
     list_display = (
         'id',
         'importer',
@@ -318,6 +336,10 @@ class OdkFormImporterJobAdmin(admin.ModelAdmin):
         'odk_form_importer__odk_form__name',
         'odk_form_importer__odk_form__version',
     )
+    list_display_links = (
+        'id',
+        'importer'
+    )
 
     def importer(self, odk_form_importer_job):
         return odk_form_importer_job.odk_form_importer.importer
@@ -334,6 +356,7 @@ class OdkFormImporterJobAdmin(admin.ModelAdmin):
 
 @admin.register(OdkEntityList)
 class OdkEntityListAdmin(admin.ModelAdmin):
+    ordering = ['id']
     list_display = (
         'id',
         'name',
@@ -346,10 +369,15 @@ class OdkEntityListAdmin(admin.ModelAdmin):
     search_fields = (
         'name',
     )
+    list_display_links = (
+        'id',
+        'name'
+    )
 
 
 @admin.register(OdkEntityListExporter)
 class OdkEntityListExporterAdmin(admin.ModelAdmin):
+    ordering = ['id']
     list_display = (
         'id',
         'exporter',
@@ -366,10 +394,15 @@ class OdkEntityListExporterAdmin(admin.ModelAdmin):
         'exporter',
         'odk_entity_list__name',
     )
+    list_display_links = (
+        'id',
+        'exporter'
+    )
 
 
 @admin.register(OdkEntityListExporterJob)
 class OdkEntityListExporterJobAdmin(admin.ModelAdmin):
+    ordering = ['-export_date', '-id']
     list_display = (
         'id',
         'exporter',
@@ -391,6 +424,10 @@ class OdkEntityListExporterJobAdmin(admin.ModelAdmin):
         'odk_entity_list_exporter__odk_entity_list__name',
         'odk_entity_list_exporter__exporter',
         'odk_entity_list_exporter__odk_entity_list__odk_project__name',
+    )
+    list_display_links = (
+        'id',
+        'exporter'
     )
 
     def exporter(self, odk_entity_list_exporter_job):
@@ -414,6 +451,7 @@ class EtlDocumentAdmin(AdminImportFileBaseAdmin):
             import_kwargs={'verbose': True}
         )
 
+    ordering = ['id']
     list_display = (
         'id',
         'name',
@@ -426,18 +464,23 @@ class EtlDocumentAdmin(AdminImportFileBaseAdmin):
     search_fields = (
         'name',
         'version',
+    )
+    list_display_links = (
+        'id',
+        'name'
     )
 
 
 @admin.register(EtlMapping)
 class EtlMappingAdmin(admin.ModelAdmin):
+    ordering = ['etl_document__name', 'etl_document__version', 'id']
     list_display = (
         'id',
+        'etl_document__name',
+        'etl_document__version',
         'source_name',
         'target_name',
         'is_enabled',
-        'etl_document__name',
-        'etl_document__version',
     )
     list_filter = (
         'is_enabled',
@@ -449,12 +492,17 @@ class EtlMappingAdmin(admin.ModelAdmin):
         'target_name',
         'etl_document__name',
         'etl_document__version',
+    )
+    list_display_links = (
+        'id',
+        'source_name'
     )
 
 
 # Events
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
+    ordering = ['-id']
     list_display = (
         'id',
         'event_type',
@@ -474,11 +522,16 @@ class EventAdmin(admin.ModelAdmin):
         'key',
         'cluster__name',
         'area_code',
+    )
+    list_display_links = (
+        'id',
+        'event_type'
     )
 
 
 @admin.register(Baby)
 class BabyAdmin(admin.ModelAdmin):
+    ordering = ['-id']
     list_display = (
         'id',
         'name',
@@ -489,10 +542,15 @@ class BabyAdmin(admin.ModelAdmin):
         'key',
         'name',
     )
+    list_display_links = (
+        'id',
+        'name'
+    )
 
 
 @admin.register(Death)
 class DeathAdmin(admin.ModelAdmin):
+    ordering = ['-id']
     list_display = (
         'id',
         'death_type',
@@ -518,11 +576,16 @@ class DeathAdmin(admin.ModelAdmin):
         'va_staff__full_name',
         'va_staff__email',
     )
+    list_display_links = (
+        'id',
+        'death_type'
+    )
 
 
 # Households
 @admin.register(Household)
 class HouseholdAdmin(admin.ModelAdmin):
+    ordering = ['-id']
     list_display = (
         'id',
         'household_code',
@@ -545,10 +608,15 @@ class HouseholdAdmin(admin.ModelAdmin):
         'area__code',
         'event_staff__full_name',
     )
+    list_display_links = (
+        'id',
+        'household_code'
+    )
 
 
 @admin.register(HouseholdMember)
 class HouseholdMemberAdmin(admin.ModelAdmin):
+    ordering = ['-id']
     list_display = (
         'id',
         'member_type',
@@ -564,11 +632,16 @@ class HouseholdMemberAdmin(admin.ModelAdmin):
         'key',
         'full_name',
     )
+    list_display_links = (
+        'id',
+        'member_type'
+    )
 
 
 # Verbal Autopsies
 @admin.register(VerbalAutopsy)
 class VerbalAutopsyAdmin(admin.ModelAdmin):
+    ordering = ['-id']
     list_display = (
         'id',
         'submission_date',
@@ -585,6 +658,10 @@ class VerbalAutopsyAdmin(admin.ModelAdmin):
         'cluster__name',
         'area__code',
     )
+    list_display_links = (
+        'id',
+        'submission_date'
+    )
 
 
 @admin.register(Province)
@@ -597,6 +674,7 @@ class ProvinceAdmin(AdminImportFileBaseAdmin):
             import_kwargs={'verbose': True},
         )
 
+    ordering = ['id']
     list_display = (
         'id',
         'code',
@@ -608,6 +686,10 @@ class ProvinceAdmin(AdminImportFileBaseAdmin):
     search_fields = (
         'code',
         'name',
+    )
+    list_display_links = (
+        'id',
+        'code'
     )
 
 
@@ -621,6 +703,7 @@ class ClusterAdmin(AdminImportFileBaseAdmin):
             import_kwargs={'verbose': True},
         )
 
+    ordering = ['id']
     list_display = (
         'id',
         'code',
@@ -635,6 +718,10 @@ class ClusterAdmin(AdminImportFileBaseAdmin):
         'name',
         'province__name',
     )
+    list_display_links = (
+        'id',
+        'code'
+    )
 
 
 @admin.register(Area)
@@ -647,6 +734,7 @@ class AreaAdmin(AdminImportFileBaseAdmin):
             import_kwargs={'verbose': True},
         )
 
+    ordering = ['id']
     list_display = (
         'id',
         'code',
@@ -669,6 +757,10 @@ class AreaAdmin(AdminImportFileBaseAdmin):
         'adm5_code',
         'adm5_name',
     )
+    list_display_links = (
+        'id',
+        'code'
+    )
 
 
 @admin.register(Staff)
@@ -681,6 +773,7 @@ class StaffAdmin(AdminImportFileBaseAdmin):
             import_kwargs={'verbose': True},
         )
 
+    ordering = ['id']
     list_display = (
         'id',
         'code',
@@ -700,4 +793,8 @@ class StaffAdmin(AdminImportFileBaseAdmin):
         'full_name',
         'province__name',
         'cluster__name',
+    )
+    list_display_links = (
+        'id',
+        'code'
     )

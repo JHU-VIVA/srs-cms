@@ -9,14 +9,19 @@ from django.contrib.auth.models import Group
 
 
 class SeedLoader:
+    DEV = 'dev'
+    TEST = 'test'
+    STAGING = 'staging'
+    PRODUCTION = 'production'
+
     ENVS = [
-        'dev',
-        'test',
-        'staging',
-        'production'
+        DEV,
+        TEST,
+        STAGING,
+        PRODUCTION
     ]
 
-    def __init__(self, env='dev'):
+    def __init__(self, env=DEV):
         if env not in self.ENVS:
             raise Exception('Environment not supported')
         self.env = env
@@ -33,10 +38,11 @@ class SeedLoader:
         self.load_clusters()
         self.load_areas()
         self.load_staff()
-        self.seed_users()
+        if self.env == self.DEV:
+            self.seed_users()
         self.seed_etl()
         self.seed_odk()
-        if with_test_data:
+        if with_test_data and self.env == self.DEV:
             self.generate_test_data()
 
     def load_permissions(self):
@@ -44,7 +50,7 @@ class SeedLoader:
 
     def load_provinces(self):
         csv_path = None
-        if self.env == 'dev':
+        if self.env == self.DEV:
             csv_path = Env.get('DEV_LOAD_PROVINCES_CSV', default=None)
 
         if not csv_path:
@@ -55,7 +61,7 @@ class SeedLoader:
 
     def load_clusters(self):
         csv_path = None
-        if self.env == 'dev':
+        if self.env == self.DEV:
             csv_path = Env.get('DEV_LOAD_CLUSTERS_CSV', default=None)
 
         if not csv_path:
@@ -66,7 +72,7 @@ class SeedLoader:
 
     def load_areas(self):
         csv_path = None
-        if self.env == 'dev':
+        if self.env == self.DEV:
             csv_path = Env.get('DEV_LOAD_AREAS_CSV', default=None)
 
         if not csv_path:
@@ -77,7 +83,7 @@ class SeedLoader:
 
     def load_staff(self):
         csv_path = None
-        if self.env == 'dev':
+        if self.env == self.DEV:
             csv_path = Env.get('DEV_LOAD_STAFF_CSV', default=None)
 
         if not csv_path:

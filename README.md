@@ -11,20 +11,24 @@ srs-cms
   - tests       # Django App Tests
 ```
 
-# Docker
+# Prerequisites:
 
-Deploy with docker: [docker/ReadMe.md](docker/ReadMe.md)
+> Must be installed before beginning Initial Setup
 
-# Development
-
-## Prerequisites:  (Must be installed before beginning Initial Setup)
-
-- PostgreSQL
+- PostgreSQL 16+
 - Node
 - NPM
 - Python 3.12
 - Pipenv
 - Make
+
+# Production Deployment
+
+## Docker
+
+Deploy with docker: [docker/ReadMe.md](docker/ReadMe.md)
+
+# Development
 
 ## WINDOWS notes
 
@@ -86,6 +90,8 @@ Deploy with docker: [docker/ReadMe.md](docker/ReadMe.md)
 - Run Tests: `make test`
 
 ## Data Loading Commands
+
+Seed the production database: `make prod_seed_db`
 
 Load Permissions and Groups: `./manage.py load_permissions`
 

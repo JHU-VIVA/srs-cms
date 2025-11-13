@@ -10,11 +10,8 @@ echo "Database is ready."
 if [ ! -f "/app/.app_initialized" ]; then
     echo "Initializing App..."
 
-    echo "Running Database Migrations..."
-    python manage.py migrate
-
-    echo "Loading Permissions..."
-    python manage.py load_permissions
+    echo "Creating database, applying migrations, and seeding..."
+    python manage.py init_database --env production --migrate --seed
 
     echo "Building Tailwind CSS..."
     make npm_install

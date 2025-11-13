@@ -27,13 +27,13 @@ migrate:
 # Creates and seeds the dev database.
 .PHONY: init_dev
 init_dev:
-	python manage.py dev_init_database --migrate --seed
+	python manage.py init_database --migrate --seed
 
 
 # Creates, seeds, loads test data into the dev database.
 .PHONY: init_dev_with_test_data
 init_dev_with_test_data:
-	python manage.py dev_init_database --migrate --seed --with-test-data
+	python manage.py init_database --migrate --seed --with-test-data
 
 
 # Creates and seeds the dev database.
@@ -45,9 +45,15 @@ dev_generate_test_data:
 # Seed the dev database.
 .PHONY: dev_seed_db
 dev_seed_db:
-	python manage.py dev_seed_database
+	python manage.py seed_database
 
 dev_seed: dev_seed_db
+
+
+# Seed the production database.
+.PHONY: prod_seed_db
+prod_seed_db:
+	python manage.py seed_database --env production
 
 
 # Createa a super users in the database.
@@ -65,7 +71,7 @@ database:
 # Drop the database if it exists and recreate an empty database.
 .PHONY: init_database
 init_database:
-	python manage.py dev_init_database
+	python manage.py init_database
 
 init_db: init_database
 
@@ -73,7 +79,7 @@ init_db: init_database
 # Drops the database if it exists, recreates an empty database, and runs Django migrations.
 .PHONY: init_database_migrate
 init_database_migrate:
-	python manage.py dev_init_database --migrate
+	python manage.py init_database --migrate
 
 init_db_migrate: init_database_migrate
 
@@ -98,13 +104,13 @@ reset_migrations: delete_migrations
 reset_migrations_init_dev: delete_migrations
 	make init_database
 	make migrations
-	python manage.py dev_init_database --migrate --seed
+	python manage.py init_database --migrate --seed
 
 
 # Kills all connections to the database.
 .PHONY: kill_db_connections
 kill_db_connections:
-	python manage.py dev_init_database --kill-connections
+	python manage.py init_database --kill-connections
 
 
 # Run the development server.
