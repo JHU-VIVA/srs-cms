@@ -30,7 +30,7 @@ class HouseholdMembersImporter(FromSubmissionImporterBase):
             return False
 
     def on_before_save_model(self, new_household_member, etl_record, form_submission):
-        use_existing_if_missing = Env.get("DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING", cast=bool)
+        use_existing_if_missing = Env.get("DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING", cast=bool, default=False)
         try:
             household_key = self.get_key_from_record(form_submission)
             household = (Household.find_by(key=household_key) or

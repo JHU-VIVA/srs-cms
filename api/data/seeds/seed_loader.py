@@ -38,11 +38,11 @@ class SeedLoader:
         self.load_clusters()
         self.load_areas()
         self.load_staff()
-        if self.env == self.DEV:
+        if self.env in [self.DEV, self.TEST]:
             self.seed_users()
         self.seed_etl()
         self.seed_odk()
-        if with_test_data and self.env == self.DEV:
+        if with_test_data and self.env in [self.DEV, self.TEST]:
             self.generate_test_data()
 
     def load_permissions(self):

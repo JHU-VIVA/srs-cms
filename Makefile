@@ -203,6 +203,18 @@ docker_createsuperuser:
 	docker exec -it production-srs-cms-web-1 make createsuperuser
 
 
+# Import Production docker Form Submissions from ODK starting from the last imported date.
+.PHONY: docker_odk_import_form_submissions
+docker_odk_import_form_submissions:
+	docker exec -it production-srs-cms-web-1 make odk_import_form_submissions
+
+
+# Export Production docker Entity Lists to ODK.
+.PHONY: docker_odk_export_entity_lists
+docker_odk_export_entity_lists:
+	docker exec -it production-srs-cms-web-1 make odk_export_entity_lists
+
+
 # Connect to Production web container in docker.
 .PHONY: docker_bash
 docker_bash:

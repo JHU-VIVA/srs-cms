@@ -19,4 +19,6 @@
 
 # Misc. Commands
 
+- Import Form Submissions: `make docker_odk_import_form_submissions`
+- Export Entity Lists: `make docker_odk_export_entity_lists`
 - Get a shell in the `web` container: `make docker_bash`

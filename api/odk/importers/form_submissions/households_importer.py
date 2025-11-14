@@ -16,7 +16,7 @@ class HouseholdsImporter(FromSubmissionImporterBase):
         return self.result
 
     def on_before_save_model(self, new_household, etl_record, form_submission):
-        use_existing_if_missing = Env.get("DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING", cast=bool)
+        use_existing_if_missing = Env.get("DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING", cast=bool, default=False)
         try:
             cluster = (Cluster.find_by(code=new_household.cluster_code) or
                        (Cluster.objects.first() if use_existing_if_missing else None))
