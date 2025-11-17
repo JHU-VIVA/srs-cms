@@ -6,6 +6,11 @@
 .git
 .gitignore
 .env
+docker/.env
+docker/.env.production
+docker/.env.staging
+docker/nginx.production.conf
+docker/nginx.staging.conf
 __pycache__/
 .pytest_cache/
 *.pyc

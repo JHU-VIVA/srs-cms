@@ -11,7 +11,7 @@ if [ ! -f "/app/.app_initialized" ]; then
     echo "Initializing App..."
 
     echo "Creating database, applying migrations, and seeding..."
-    python manage.py init_database --env production --migrate --seed
+    python manage.py init_database --stage "$APP_STAGE" --migrate --seed
 
     echo "Building Tailwind CSS..."
     make npm_install
@@ -23,7 +23,7 @@ if [ ! -f "/app/.app_initialized" ]; then
     touch /app/.app_initialized
     chmod 400 /app/.app_initialized
 else
-    echo "App already initialized, skipping..."
+    echo "App already initialized."
 fi
 
 echo "Starting Gunicorn..."

@@ -13,7 +13,7 @@ script_dir = os.path.dirname(__file__)
 sys.path.append(os.path.join(script_dir, '..'))
 
 # Initialize Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 # Import Models to generate mappings for.

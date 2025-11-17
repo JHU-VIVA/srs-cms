@@ -6,7 +6,6 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV APP_HOME=/app
 ENV APP_USER=appuser
-ARG DOCKER_ENV_PATH
 
 # Create the app directories
 RUN mkdir $APP_HOME
@@ -42,7 +41,7 @@ RUN pipenv install --deploy --system
 COPY . $APP_HOME/
 
 # Copy entrypoint script
-COPY $DOCKER_ENV_PATH/entrypoint.sh $APP_HOME/entrypoint.sh
+COPY docker/entrypoint.sh $APP_HOME/entrypoint.sh
 RUN chmod +x $APP_HOME/entrypoint.sh
 
 # Change ownership of $APP_HOME to non-root user

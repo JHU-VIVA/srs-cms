@@ -15,13 +15,15 @@ from pathlib import Path
 from config.env import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = Env.secret_key()
+
+APP_STAGE = Env.app_stage()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = Env.debug()
@@ -151,10 +153,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'client', 'static')
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, '.static_files')
+STATIC_ROOT = Env.get("STATIC_ROOT", default=os.path.join(BASE_DIR, '.static_files'), cast=str)
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '.media_files')
+MEDIA_ROOT = Env.get("MEDIA_ROOT", default=os.path.join(BASE_DIR, '.media_files'), cast=str)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -162,6 +164,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '.media_files')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 APPEND_SLASH = True
+
+SECURE_SSL_REDIRECT = Env.get("SECURE_SSL_REDIRECT", default=False, cast=bool)
+SESSION_COOKIE_SECURE = Env.get("SESSION_COOKIE_SECURE", default=True, cast=bool)
+CSRF_COOKIE_SECURE = Env.get("CSRF_COOKIE_SECURE", default=True, cast=bool)
+SECURE_BROWSER_XSS_FILTER = Env.get("SECURE_BROWSER_XSS_FILTER", default=True, cast=bool)
+SECURE_CONTENT_TYPE_NOSNIFF = Env.get("SECURE_CONTENT_TYPE_NOSNIFF", default=True, cast=bool)
 
 # ODK Settings
 ODK_BASE_URL = Env.odk_base_url()

@@ -9,10 +9,10 @@ class Command(BaseCommand):
     help = 'Initialize the Database.'
 
     def add_arguments(self, parser):
-        parser.add_argument('-e', '--env',
-                            default=SeedLoader.DEV,
-                            choices=SeedLoader.ENVS,
-                            help='Which environment files to use.')
+        parser.add_argument('-s', '--stage',
+                            default=Env.app_stage() or SeedLoader.DEV,
+                            choices=SeedLoader.STAGES,
+                            help='Which application stage files to use.')
 
         parser.add_argument(
             '--migrate',
@@ -38,7 +38,7 @@ class Command(BaseCommand):
                             help='Load test data.')
 
     def handle(self, *args, **kwargs):
-        env = kwargs['env']
+        stage = kwargs['stage']
         migrate = kwargs['migrate']
         kill_connections = kwargs['kill_connections']
         seed = kwargs['seed']
@@ -49,15 +49,18 @@ class Command(BaseCommand):
         else:
             self.db_kill_connections()
 
-            if self.db_exists() and env == SeedLoader.DEV:
+            if self.db_exists() and stage in [SeedLoader.DEV, SeedLoader.TEST]:
                 self.stdout.write(self.style.SUCCESS("Database {} exists. Dropping...".format(self.db_name)))
+                if Env.app_stage() not in [SeedLoader.DEV, SeedLoader.TEST]:
+                    self.stdout.write(self.style.ERROR("Cannot drop database when APP_STAGE is: {}".format(self.stage)))
+                    return
                 self.drop_database()
 
             if not self.db_exists():
                 self.stdout.write(self.style.SUCCESS("Database {} does not exist. Creating...").format(self.db_name))
                 self.create_database()
             else:
-                if env == SeedLoader.DEV:
+                if stage in [SeedLoader.DEV, SeedLoader.TEST]:
                     self.stdout.write(self.style.ERROR("Database {} still exists..".format(self.db_name)))
                 else:
                     self.stdout.write(self.style.SUCCESS("Database {} exists..".format(self.db_name)))
@@ -70,7 +73,7 @@ class Command(BaseCommand):
 
                 if seed:
                     self.stdout.write(self.style.SUCCESS("Seeding Database..."))
-                    call_args = ["seed_database", "--env", env]
+                    call_args = ["seed_database", "--stage", stage]
                     if with_test_data:
                         call_args.append("--with-test-data")
                     call_command(*call_args)

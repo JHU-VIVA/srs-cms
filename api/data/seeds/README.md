@@ -25,7 +25,14 @@
     - [production/etl_mappings_verbal_autopsies.json](production/etl_mappings_verbal_autopsies.json)
         - Set all occurrences of `version`.
 
-3. Import or update the database from the seed files: `python manage.py init_database --env production --seed`
+3. Update the database from the seed files:
+    - Local Database: `python manage.py seed_database --stage production`
+    - Docker Database: `docker exec -it production-srs-cms-web python manage.py seed_database --stage production`
+
+## Staging
+
+1. Copy all the files from `api/data/seeds/production` to `api/data/seeds/staging`.
+2. Follow the production steps above replacing `production` with `staging`.
 
 # CSV Files
 

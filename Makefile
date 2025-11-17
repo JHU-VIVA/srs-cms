@@ -53,7 +53,7 @@ dev_seed: dev_seed_db
 # Seed the production database.
 .PHONY: prod_seed_db
 prod_seed_db:
-	python manage.py seed_database --env production
+	python manage.py seed_database --stage production
 
 
 # Createa a super users in the database.
@@ -154,68 +154,3 @@ odk_import_form_submissions_all:
 odk_export_entity_lists:
 	python manage.py odk_export_entity_lists
 
-
-###################################################################################################
-# Docker Production
-###################################################################################################
-
-# Build Production docker image.
-.PHONY: docker_compose_build
-docker_compose_build:
-ifeq ($(OS),Windows_NT)
-	PowerShell -ExecutionPolicy Bypass -File scripts\run_with_env.ps1 docker\production\env docker compose -f docker\production\docker-compose.yml build
-else
-	scripts/run_with_env.sh docker/production/env docker compose -f docker/production/docker-compose.yml build
-#	scripts/run_with_env.sh docker/production/env docker compose -f docker/production/docker-compose.yml --progress plain build
-endif
-
-
-# Start Production docker.
-.PHONY: docker_compose_up
-docker_compose_up:
-ifeq ($(OS),Windows_NT)
-	PowerShell -ExecutionPolicy Bypass -File scripts\run_with_env.ps1 docker\production\env docker compose -f docker\production\docker-compose.yml up -d
-else
-	scripts/run_with_env.sh docker/production/env docker compose -f docker/production/docker-compose.yml up -d
-#	scripts/run_with_env.sh docker/production/env docker compose -f docker/production/docker-compose.yml --progress plain up
-endif
-
-
-# Stop Production docker.
-.PHONY: docker_compose_down
-docker_compose_down:
-ifeq ($(OS),Windows_NT)
-	PowerShell -ExecutionPolicy Bypass -File scripts\run_with_env.ps1 docker\production\env docker compose -f docker\production\docker-compose.yml down
-else
-	scripts/run_with_env.sh docker/production/env docker compose -f docker/production/docker-compose.yml down
-endif
-
-
-# Run Production docker migrations.
-.PHONY: docker_migrate
-docker_migrate:
-	docker exec -it production-srs-cms-web-1 make migrate
-
-
-# Create Production super user in docker.
-.PHONY: docker_createsuperuser
-docker_createsuperuser:
-	docker exec -it production-srs-cms-web-1 make createsuperuser
-
-
-# Import Production docker Form Submissions from ODK starting from the last imported date.
-.PHONY: docker_odk_import_form_submissions
-docker_odk_import_form_submissions:
-	docker exec -it production-srs-cms-web-1 make odk_import_form_submissions
-
-
-# Export Production docker Entity Lists to ODK.
-.PHONY: docker_odk_export_entity_lists
-docker_odk_export_entity_lists:
-	docker exec -it production-srs-cms-web-1 make odk_export_entity_lists
-
-
-# Connect to Production web container in docker.
-.PHONY: docker_bash
-docker_bash:
-	docker exec -it production-srs-cms-web-1 bash

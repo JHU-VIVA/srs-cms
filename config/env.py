@@ -22,6 +22,10 @@ class Env:
         return cls._env().get_value(name, **kwargs)
 
     @classmethod
+    def app_stage(cls):
+        return cls._env().str('APP_STAGE')
+
+    @classmethod
     def secret_key(cls):
         return cls._env().str('SECRET_KEY')
 
