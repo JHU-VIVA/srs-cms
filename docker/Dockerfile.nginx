@@ -1,0 +1,17 @@
+# Use official Nginx base
+FROM nginx:1.27-alpine
+
+ARG APP_STAGE=production
+
+# Remove default configuration
+RUN rm /etc/nginx/conf.d/default.conf || true
+RUN rm /etc/nginx/nginx.conf || true
+
+# Copy environment-specific config
+COPY --from=docker_conf nginx.${APP_STAGE}.conf /etc/nginx/nginx.conf
+
+# Expose port 80 for web traffic
+EXPOSE 80
+
+# Start Nginx normally
+CMD ["nginx", "-g", "daemon off;"]

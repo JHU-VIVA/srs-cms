@@ -14,6 +14,11 @@ if [ ! -f "$ENV_FILE" ]; then
     exit 1
 fi
 
-export $(grep -v '^#' "$ENV_FILE" | xargs)
-
-exec "$@"
+# Create an empty environment and source only the file
+env -i bash -c '
+    set -a
+    source "$1"
+    set +a
+    shift
+    exec "$@"
+' bash "$ENV_FILE" "$@"

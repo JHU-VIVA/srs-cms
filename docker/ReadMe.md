@@ -4,10 +4,10 @@
 
 - Git clone the `srs-cms` repository or download the code.
 - Change to the project docker directory: `cd srs-cms/docker`
-- Copy the docker environment file: `cp .env.template .env.$APP_STAGE`
-- Copy the nginx config file: `cp nginx.template.conf nginx.$APP_STAGE.conf`
-- Edit `.env.$APP_STAGE` and set the variables for your environment.
-- Edit `nginx.$APP_STAGE.config` for your environment.
+- Copy the following files and edit them to match your environment:
+    - `cp .env.template .env.$APP_STAGE`
+    - `cp nginx.template.conf nginx.$APP_STAGE.conf`
+    - `cp crontab.template crontab.$APP_STAGE`
 - Configure the seed data files in: `api/data/seeds/$APP_STAGE`.
     - See [api/data/seeds/README.md](../api/data/seeds/README.md) for details.
 - Build the docker image: `make build`
@@ -25,6 +25,7 @@
 - Import Form Submissions: `make odk_import_form_submissions`
 - Export Entity Lists: `make odk_export_entity_lists`
 - Get a shell in the `web` container: `make bash`
+- Get a shell in the `cron` container: `make bash_cron`
 
 # Target a different configuration
 

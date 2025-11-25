@@ -4,7 +4,7 @@
 APP_STAGE ?= production
 ENV_FILE ?= .env.$(APP_STAGE)
 
-# Build docker image.
+# Show running docker containers.
 .PHONY: ps
 ps:
 	docker ps
@@ -13,9 +13,9 @@ ps:
 .PHONY: build
 build:
 ifeq ($(OS),Windows_NT)
-	PowerShell -ExecutionPolicy Bypass -File ..\scripts\run_with_env.ps1 $(ENV_FILE) docker compose -f docker-compose.yml --project-name srs-cms-$(APP_STAGE) build
+	PowerShell -ExecutionPolicy Bypass -File ..\scripts\run_with_env.ps1 $(ENV_FILE) docker compose -f docker-compose.yml --env-file $(ENV_FILE) --project-name srs-cms-$(APP_STAGE) build
 else
-	../scripts/run_with_env.sh $(ENV_FILE) docker compose -f docker-compose.yml --project-name srs-cms-$(APP_STAGE) build
+	../scripts/run_with_env.sh $(ENV_FILE) docker compose -f docker-compose.yml --env-file $(ENV_FILE) --project-name srs-cms-$(APP_STAGE) build
 endif
 
 
@@ -23,9 +23,9 @@ endif
 .PHONY: up
 up:
 ifeq ($(OS),Windows_NT)
-	PowerShell -ExecutionPolicy Bypass -File ..\scripts\run_with_env.ps1 $(ENV_FILE) docker compose -f docker-compose.yml --project-name srs-cms-$(APP_STAGE) up -d
+	PowerShell -ExecutionPolicy Bypass -File ..\scripts\run_with_env.ps1 $(ENV_FILE) docker compose -f docker-compose.yml --env-file $(ENV_FILE) --project-name srs-cms-$(APP_STAGE) up -d
 else
-	../scripts/run_with_env.sh $(ENV_FILE) docker compose -f docker-compose.yml --project-name srs-cms-$(APP_STAGE) up -d
+	../scripts/run_with_env.sh $(ENV_FILE) docker compose -f docker-compose.yml --env-file $(ENV_FILE) --project-name srs-cms-$(APP_STAGE) up -d
 endif
 
 
@@ -33,9 +33,9 @@ endif
 .PHONY: down
 down:
 ifeq ($(OS),Windows_NT)
-	PowerShell -ExecutionPolicy Bypass -File ..\scripts\run_with_env.ps1 $(ENV_FILE) docker compose -f docker-compose.yml --project-name srs-cms-$(APP_STAGE) down
+	PowerShell -ExecutionPolicy Bypass -File ..\scripts\run_with_env.ps1 $(ENV_FILE) docker compose -f docker-compose.yml --env-file $(ENV_FILE) --project-name srs-cms-$(APP_STAGE) down
 else
-	../scripts/run_with_env.sh $(ENV_FILE) docker compose -f docker-compose.yml --project-name srs-cms-$(APP_STAGE) down
+	../scripts/run_with_env.sh $(ENV_FILE) docker compose -f docker-compose.yml --env-file $(ENV_FILE) --project-name srs-cms-$(APP_STAGE) down
 endif
 
 
@@ -67,3 +67,9 @@ odk_export_entity_lists:
 .PHONY: bash
 bash:
 	docker exec -it $(APP_STAGE)-srs-cms-web bash
+
+
+# Connect to web container in docker.
+.PHONY: bash_cron
+bash_cron:
+	docker exec -it $(APP_STAGE)-srs-cms-cron bash

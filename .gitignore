@@ -21,12 +21,12 @@ __pycache__/
 
 .idea
 .venv
-.env
-docker/.env
-docker/.env.production
-docker/.env.staging
-docker/nginx.production.conf
-docker/nginx.staging.conf
+.env*
+!.env.template
+docker/nginx.*.conf
+!docker/nginx.template.conf
+docker/crontab.*
+!docker/crontab.template
 .vscode
 .coverage
 .coverage.*

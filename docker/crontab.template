@@ -1,0 +1,16 @@
+SHELL=/bin/bash
+BASH_ENV=/app/.cron_env
+
+# ┌───────────── minute (0 - 59)
+# │ ┌──────────── hour (0 - 23)
+# │ │ ┌────────── day of month (1 - 31)
+# │ │ │ ┌──────── month (1 - 12)
+# │ │ │ │ ┌────── day of week (0 - 6)
+# │ │ │ │ │
+# 0 0 * * * appuser . /app/.cron_env && /usr/local/bin/python /app/manage.py command >> /app/logs/cron.log 2>&1
+
+# Import ODK Form Submissions once a day at 12:00am
+# 0 0 * * * appuser . /app/.cron_env && /usr/local/bin/python /app/manage.py odk_import_form_submissions >> /app/logs/cron.log 2>&1
+
+# Export ODK Entity Lists once a day at 01:00am
+# 0 1 * * * appuser . /app/.cron_env && /usr/local/bin/python /app/manage.py odk_export_entity_lists >> /app/logs/cron.log 2>&1
