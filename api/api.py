@@ -1,15 +1,122 @@
-from ninja import NinjaAPI
-from django.contrib.auth import authenticate, login, logout
+from ninja import NinjaAPI, Schema
 from ninja.security import django_auth
-from ninja import Schema
+from django.contrib.auth import authenticate, login, logout
+from django.middleware.csrf import get_token
+from django.contrib.postgres.search import TrigramSimilarity
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import F, Value
+from django.db.models.functions import Coalesce
+from django.utils.dateparse import parse_date
+from typing import Optional
+from datetime import date
+
+from api.models import Death, Province, Staff
+from api.common import Permissions
 
 api = NinjaAPI(csrf=True)
 
+
+# ──────────────────────────────────────────────
+# Schemas
+# ──────────────────────────────────────────────
 
 class AuthSchema(Schema):
     username: str
     password: str
 
+
+class DeathOut(Schema):
+    id: int
+    death_code: Optional[str] = None
+    death_status: Optional[int] = None
+    death_status_label: Optional[str] = None
+    deceased_name: Optional[str] = None
+    deceased_sex: Optional[int] = None
+    deceased_dob: Optional[date] = None
+    deceased_dod: Optional[date] = None
+    deceased_age: Optional[int] = None
+    va_proposed_date: Optional[date] = None
+    va_scheduled_date: Optional[date] = None
+    va_completed_date: Optional[date] = None
+    va_staff_id: Optional[int] = None
+    va_staff_code: Optional[str] = None
+    va_staff_name: Optional[str] = None
+    comment: Optional[str] = None
+    # From related event
+    province_id: Optional[int] = None
+    cluster_code: Optional[str] = None
+    area_code: Optional[str] = None
+    household_code: Optional[str] = None
+    staff_code: Optional[str] = None
+    worker_name: Optional[str] = None
+    household_head_name: Optional[str] = None
+    respondent_name: Optional[str] = None
+    submission_date: Optional[date] = None
+
+    @staticmethod
+    def from_death(death):
+        event = death.event
+        va_staff = death.va_staff
+        event_staff = event.event_staff
+        return DeathOut(
+            id=death.id,
+            death_code=death.death_code,
+            death_status=death.death_status,
+            death_status_label=Death.DeathStatus(death.death_status).label if death.death_status is not None else None,
+            deceased_name=death.deceased_name,
+            deceased_sex=death.deceased_sex,
+            deceased_dob=death.deceased_dob,
+            deceased_dod=death.deceased_dod,
+            deceased_age=death.deceased_age,
+            va_proposed_date=death.va_proposed_date,
+            va_scheduled_date=death.va_scheduled_date,
+            va_completed_date=death.va_completed_date,
+            va_staff_id=death.va_staff_id,
+            va_staff_code=va_staff.code if va_staff else death.va_staff_code,
+            va_staff_name=va_staff.full_name if va_staff else None,
+            comment=death.comment,
+            province_id=event.cluster.province_id if event.cluster else None,
+            cluster_code=event.cluster_code,
+            area_code=event.area_code,
+            household_code=event.household_code,
+            staff_code=event.staff_code,
+            worker_name=event_staff.full_name if event_staff else None,
+            household_head_name=event.household_head_name,
+            respondent_name=event.respondent_name,
+            submission_date=event.submission_date,
+        )
+
+
+class DeathUpdateSchema(Schema):
+    va_scheduled_date: Optional[date] = None
+    va_staff_id: Optional[int] = None
+    comment: Optional[str] = None
+
+
+class ProvinceOut(Schema):
+    id: int
+    code: str
+    name: str
+
+
+class StaffOut(Schema):
+    id: int
+    code: Optional[str] = None
+    full_name: Optional[str] = None
+    staff_type: str
+
+
+class PaginatedDeathsOut(Schema):
+    items: list[DeathOut]
+    total: int
+    page: int
+    page_size: int
+    num_pages: int
+
+
+# ──────────────────────────────────────────────
+# Auth endpoints
+# ──────────────────────────────────────────────
 
 @api.post("/auth/login")
 def login_view(request, payload: AuthSchema):
@@ -29,23 +136,130 @@ def logout_view(request):
 
 @api.get("/auth/user")
 def get_user(request):
+    get_token(request)  # Ensure CSRF cookie is set
     if request.user.is_authenticated:
+        permissions = {
+            "can_schedule_va": Permissions.has_permission(request.user, Permissions.Codes.SCHEDULE_VA),
+            "can_view_all_provinces": Permissions.has_permission(request.user, Permissions.Codes.VIEW_ALL_PROVINCES),
+        }
         return {
             "is_authenticated": True,
             "username": request.user.username,
             "email": request.user.email,
+            "permissions": permissions,
         }
     else:
         return {"is_authenticated": False}
 
 
-@api.get("/hello", auth=django_auth)
-def test_protected(request):
-    """
-    Test endpoint that requires authentication.
-    TODO: Delete this later.
-    """
-    if request.user.is_authenticated:
-        return {"message": f"Hello, {request.user.username}!"}
+# ──────────────────────────────────────────────
+# Province endpoints
+# ──────────────────────────────────────────────
+
+@api.get("/provinces", auth=django_auth, response=list[ProvinceOut])
+def list_provinces(request):
+    return Province.objects.for_user(request.user).order_by('name')
+
+
+# ──────────────────────────────────────────────
+# Staff endpoints
+# ──────────────────────────────────────────────
+
+@api.get("/staff", auth=django_auth, response=list[StaffOut])
+def list_staff(request, province_id: Optional[int] = None, staff_type: Optional[str] = None):
+    qs = Staff.objects.all()
+    if province_id:
+        qs = qs.filter(province_id=province_id)
+    if staff_type:
+        qs = qs.filter(staff_type=staff_type)
+    return qs.order_by('full_name')
+
+
+# ──────────────────────────────────────────────
+# Death endpoints
+# ──────────────────────────────────────────────
+
+@api.get("/deaths", auth=django_auth, response=PaginatedDeathsOut)
+def list_deaths(
+    request,
+    status: Optional[int] = None,
+    province_id: Optional[int] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    q: Optional[str] = None,
+    page: int = 1,
+    page_size: int = 10,
+):
+    qs = Death.objects.select_related('event', 'event__cluster', 'event__area', 'event__event_staff', 'va_staff')
+
+    if status is not None:
+        qs = qs.filter(death_status=status)
+
+    if province_id:
+        qs = qs.filter(event__cluster__province_id=province_id)
+
+    if start_date and end_date:
+        qs = qs.filter(deceased_dod__gte=parse_date(start_date), deceased_dod__lte=parse_date(end_date))
+    elif start_date:
+        qs = qs.filter(deceased_dod=parse_date(start_date))
+    elif end_date:
+        qs = qs.filter(deceased_dod=parse_date(end_date))
+
+    # Trigram text search (mirrors the existing view logic)
+    if q and q.strip():
+        query = q.strip()
+        similarity = (
+            0.5 * TrigramSimilarity(Coalesce(F('death_code'), Value('')), query) +
+            0.4 * TrigramSimilarity(Coalesce(F('va_staff__code'), Value('')), query) +
+            0.4 * TrigramSimilarity(Coalesce(F('event__event_staff__code'), Value('')), query) +
+            0.4 * TrigramSimilarity(Coalesce(F('event__area__code'), Value('')), query) +
+            0.4 * TrigramSimilarity(Coalesce(F('event__household_head_name'), Value('')), query) +
+            0.4 * TrigramSimilarity(Coalesce(F('deceased_name'), Value('')), query) +
+            0.4 * TrigramSimilarity(Coalesce(F('event__respondent_name'), Value('')), query)
+        )
+        qs = qs.annotate(similarity=similarity).filter(similarity__gte=0.05).order_by('-similarity')
     else:
-        return {"message": "You are not authenticated."}
+        qs = qs.order_by('-id')
+
+    paginator = Paginator(qs, page_size)
+    try:
+        page_obj = paginator.page(page)
+    except (PageNotAnInteger, EmptyPage):
+        page_obj = paginator.page(1)
+
+    return PaginatedDeathsOut(
+        items=[DeathOut.from_death(d) for d in page_obj.object_list],
+        total=paginator.count,
+        page=page_obj.number,
+        page_size=page_size,
+        num_pages=paginator.num_pages,
+    )
+
+
+@api.get("/deaths/{death_id}", auth=django_auth, response=DeathOut)
+def get_death(request, death_id: int):
+    death = Death.objects.select_related(
+        'event', 'event__cluster', 'event__area', 'event__event_staff', 'va_staff'
+    ).get(id=death_id)
+    return DeathOut.from_death(death)
+
+
+@api.put("/deaths/{death_id}", auth=django_auth)
+def update_death(request, death_id: int, payload: DeathUpdateSchema):
+    death = Death.objects.select_related('event').get(id=death_id)
+
+    if death.death_status == Death.DeathStatus.VA_COMPLETED:
+        return api.create_response(request, {"success": False, "message": "Cannot edit a completed VA."}, status=400)
+
+    if payload.va_scheduled_date is not None:
+        death.va_scheduled_date = payload.va_scheduled_date
+    if payload.va_staff_id is not None:
+        death.va_staff_id = payload.va_staff_id
+    if payload.comment is not None:
+        death.comment = payload.comment
+
+    if death.death_status != Death.DeathStatus.VA_SCHEDULED:
+        death.death_status = Death.DeathStatus.VA_SCHEDULED
+
+    death.save()
+    return {"success": True, "message": "Death record updated."}
