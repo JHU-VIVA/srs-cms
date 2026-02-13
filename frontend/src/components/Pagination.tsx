@@ -26,7 +26,7 @@ export default function Pagination({ page, total, pageSize, onPageChange }: Prop
         </button>
         {range.map((p) =>
           p === page ? (
-            <span key={p} className="join-item btn btn-sm btn-active">
+            <span key={p} className="join-item btn btn-sm btn-primary">
               {p}
             </span>
           ) : (

@@ -12,6 +12,12 @@ const STATUS_NEW = 0;
 const STATUS_SCHEDULED = 1;
 const STATUS_COMPLETED = 2;
 
+const STATUS_COLORS = {
+  blue: "bg-blue-400",
+  amber: "bg-amber-400",
+  emerald: "bg-emerald-400",
+} as const;
+
 export default function DeathsPage() {
   const { user } = useAuth();
   const [provinces, setProvinces] = useState<Province[]>([]);
@@ -86,26 +92,26 @@ export default function DeathsPage() {
   if (loading && !newDeaths) {
     return (
       <div className="flex justify-center py-10">
-        <span className="loading loading-spinner loading-lg"></span>
+        <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto py-4">
+      <div className="py-4">
         <div className="alert alert-error">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-4">
-      <h1 className="text-2xl font-bold mb-5">Death Management</h1>
+    <div className="py-6 animate-fade-in">
+      <h1 className="text-2xl font-bold mb-5 text-slate-800">Death Management</h1>
 
       {/* Filters */}
-      <div className="mb-4">
-        <form onSubmit={handleSearch} className="mb-4">
+      <div className="glass-card p-5 mb-6">
+        <form onSubmit={handleSearch}>
           <div className="columns-sm">
             <div className="form-row">
               <label className="form-label w-20" htmlFor="province">
@@ -199,16 +205,18 @@ export default function DeathsPage() {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-sm btn-primary">
-            Search
-          </button>
-          <button
-            type="button"
-            className="btn btn-sm btn-secondary ml-2"
-            onClick={handleReset}
-          >
-            Reset
-          </button>
+          <div className="flex gap-2 mt-2">
+            <button type="submit" className="btn btn-sm btn-primary">
+              Search
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-ghost"
+              onClick={handleReset}
+            >
+              Reset
+            </button>
+          </div>
         </form>
       </div>
 
@@ -223,6 +231,7 @@ export default function DeathsPage() {
           canScheduleVa={canScheduleVa}
           actionLabel="Schedule VA"
           columns="new"
+          statusColor="blue"
         />
       )}
 
@@ -237,6 +246,7 @@ export default function DeathsPage() {
           canScheduleVa={canScheduleVa}
           actionLabel="Edit"
           columns="new"
+          statusColor="amber"
         />
       )}
 
@@ -251,6 +261,7 @@ export default function DeathsPage() {
           canScheduleVa={canScheduleVa}
           actionLabel="View"
           columns="completed"
+          statusColor="emerald"
         />
       )}
     </div>
@@ -266,6 +277,7 @@ interface DeathTableProps {
   canScheduleVa: boolean;
   actionLabel: string;
   columns: "new" | "completed";
+  statusColor: keyof typeof STATUS_COLORS;
 }
 
 function DeathTable({
@@ -277,34 +289,39 @@ function DeathTable({
   canScheduleVa,
   actionLabel,
   columns,
+  statusColor,
 }: DeathTableProps) {
   return (
-    <>
-      <h2 className="font-bold py-4">
-        {title} <span>({deaths.total})</span>
-      </h2>
-      <div className="overflow-x-auto border-solid border-2">
-        <table className="table table-xs">
+    <div className="section-card animate-slide-up">
+      <div className="section-header">
+        <div className="flex items-center gap-2">
+          <span className={`w-2.5 h-2.5 rounded-full ${STATUS_COLORS[statusColor]}`}></span>
+          <span className="section-title">{title}</span>
+          <span className="section-count">({deaths.total})</span>
+        </div>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="table-enhanced w-full">
           <thead>
             <tr>
-              <th className="text-wrap">Death ID</th>
-              <th className="text-wrap">Work Area/District Name</th>
-              <th className="text-wrap">Cluster/Worker Name</th>
-              <th className="text-wrap">Name of Deceased</th>
-              <th className="text-wrap">Date of Death</th>
-              <th className="text-wrap">Household ID</th>
+              <th>Death ID</th>
+              <th>Work Area/District</th>
+              <th>Cluster/Worker</th>
+              <th>Deceased Name</th>
+              <th>Date of Death</th>
+              <th>Household ID</th>
               {columns === "new" ? (
                 <>
-                  <th className="text-wrap">Head of Household Name</th>
-                  <th className="text-wrap">Respondent Name</th>
-                  <th className="text-wrap">VA Date Requested by Family</th>
-                  <th className="text-wrap">Death Event Submission Date</th>
+                  <th>HH Head Name</th>
+                  <th>Respondent</th>
+                  <th>VA Date Requested</th>
+                  <th>Submission Date</th>
                 </>
               ) : (
                 <>
-                  <th className="text-wrap">VA Interviewer Name</th>
-                  <th className="text-wrap">VA Date</th>
-                  <th className="text-wrap">VA Submitted Date</th>
+                  <th>VA Interviewer</th>
+                  <th>VA Date</th>
+                  <th>VA Submitted</th>
                 </>
               )}
               <th></th>
@@ -313,14 +330,14 @@ function DeathTable({
           <tbody>
             {deaths.items.map((d) => (
               <tr key={d.id}>
-                <td>{d.death_code}</td>
+                <td className="font-mono text-xs">{d.death_code}</td>
                 <td>{d.area_code}</td>
                 <td>
                   {d.cluster_code} / {d.worker_name}
                 </td>
-                <td>{d.deceased_name}</td>
+                <td className="font-medium">{d.deceased_name}</td>
                 <td>{d.deceased_dod}</td>
-                <td>{d.household_code}</td>
+                <td className="font-mono text-xs">{d.household_code}</td>
                 {columns === "new" ? (
                   <>
                     <td>{d.household_head_name}</td>
@@ -339,7 +356,7 @@ function DeathTable({
                   {canScheduleVa && (
                     <Link
                       to={`/deaths/${d.id}`}
-                      className="btn btn-ghost btn-xs"
+                      className="btn btn-ghost btn-xs text-primary hover:bg-primary/10"
                     >
                       {actionLabel}
                     </Link>
@@ -350,12 +367,14 @@ function DeathTable({
           </tbody>
         </table>
       </div>
-      <Pagination
-        page={page}
-        total={deaths.total}
-        pageSize={pageSize}
-        onPageChange={onPageChange}
-      />
-    </>
+      <div className="px-5 py-2">
+        <Pagination
+          page={page}
+          total={deaths.total}
+          pageSize={pageSize}
+          onPageChange={onPageChange}
+        />
+      </div>
+    </div>
   );
 }

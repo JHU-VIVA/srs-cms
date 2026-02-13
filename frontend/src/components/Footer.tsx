@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
-    <footer className="footer footer-center bg-base-200 text-base-content p-4">
+    <footer className="footer footer-center glass-footer text-slate-500 p-4">
       <aside>
-        <p></p>
+        <p className="text-sm">SRS-CMS</p>
       </aside>
     </footer>
   );

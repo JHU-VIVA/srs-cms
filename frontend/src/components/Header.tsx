@@ -5,7 +5,7 @@ export default function Header() {
   const { user, logout } = useAuth();
 
   return (
-    <div className="navbar bg-base-200">
+    <div className="navbar glass-nav">
       <div className="navbar-start">
         {/* Mobile hamburger */}
         <div className="dropdown">
@@ -26,12 +26,12 @@ export default function Header() {
             </svg>
           </div>
           {user && (
-            <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+            <ul className="menu menu-sm dropdown-content glass-card z-[1] mt-3 w-52 p-2">
               <MenuItems />
             </ul>
           )}
         </div>
-        <Link to="/" className="btn btn-ghost text-xl">
+        <Link to="/" className="btn btn-ghost text-xl font-bold text-slate-800">
           SRS-CMS
         </Link>
       </div>
@@ -39,7 +39,7 @@ export default function Header() {
       {/* Desktop nav */}
       <div className="navbar-center hidden lg:flex">
         {user && (
-          <ul className="menu bg-base-200 lg:menu-horizontal rounded-box">
+          <ul className="menu lg:menu-horizontal rounded-box">
             <MenuItems />
           </ul>
         )}
@@ -53,15 +53,15 @@ export default function Header() {
             role="button"
             className="btn btn-ghost btn-circle avatar"
           >
-            <div className="w-10 rounded-full bg-base-300 flex items-center justify-center">
-              <span className="text-lg">
+            <div className="w-10 rounded-full bg-primary/10 ring ring-primary/30 ring-offset-2 ring-offset-white/50 flex items-center justify-center">
+              <span className="text-lg font-semibold text-primary">
                 {user ? user.username[0].toUpperCase() : "?"}
               </span>
             </div>
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content glass-card z-[1] mt-3 w-52 p-2"
           >
             {user ? (
               <>
