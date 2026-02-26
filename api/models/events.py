@@ -214,6 +214,8 @@ class Event(QueryExtensionMixin, models.Model):
                      opclasses=['gin_trgm_ops']),
             GinIndex(fields=['respondent_name'], name='events_gin_respondent_name',
                      opclasses=['gin_trgm_ops']),
+            GinIndex(fields=['mother_name'], name='events_gin_mother_name',
+                     opclasses=['gin_trgm_ops']),
         ]
 
     def __str__(self):

@@ -10,7 +10,7 @@ from django.utils.dateparse import parse_date
 from typing import Optional
 from datetime import date
 
-from api.models import Death, Province, Staff
+from api.models import Death, Event, Province, Staff
 from api.common import Permissions
 
 api = NinjaAPI(csrf=True)
@@ -108,6 +108,80 @@ class StaffOut(Schema):
 
 class PaginatedDeathsOut(Schema):
     items: list[DeathOut]
+    total: int
+    page: int
+    page_size: int
+    num_pages: int
+
+
+class BabyOut(Schema):
+    id: int
+    name: Optional[str] = None
+    sex: Optional[int] = None
+    preg_outcome_date: Optional[date] = None
+    weight: Optional[float] = None
+    is_birth_registered: Optional[bool] = None
+
+
+class PregnancyOutcomeOut(Schema):
+    id: int
+    cluster_code: Optional[str] = None
+    area_code: Optional[str] = None
+    preg_outcome_date: Optional[date] = None
+    mother_name: Optional[str] = None
+    mother_age_years: Optional[int] = None
+    birth_sing_outcome: Optional[int] = None
+    birth_sing_outcome_label: Optional[str] = None
+    birth_multi: Optional[int] = None
+    birth_multi_alive: Optional[int] = None
+    birth_multi_still: Optional[int] = None
+    household_code: Optional[str] = None
+    household_head_name: Optional[str] = None
+    respondent_name: Optional[str] = None
+    staff_code: Optional[str] = None
+    worker_name: Optional[str] = None
+    submission_date: Optional[date] = None
+    province_id: Optional[int] = None
+    babies: list[BabyOut] = []
+
+    @staticmethod
+    def from_event(event):
+        event_staff = event.event_staff
+        return PregnancyOutcomeOut(
+            id=event.id,
+            cluster_code=event.cluster_code,
+            area_code=event.area_code,
+            preg_outcome_date=event.preg_outcome_date,
+            mother_name=event.mother_name,
+            mother_age_years=event.mother_age_years,
+            birth_sing_outcome=event.birth_sing_outcome,
+            birth_sing_outcome_label=Event.BirthOutcomeType(event.birth_sing_outcome).label if event.birth_sing_outcome is not None else None,
+            birth_multi=event.birth_multi,
+            birth_multi_alive=event.birth_multi_alive,
+            birth_multi_still=event.birth_multi_still,
+            household_code=event.household_code,
+            household_head_name=event.household_head_name,
+            respondent_name=event.respondent_name,
+            staff_code=event.staff_code,
+            worker_name=event_staff.full_name if event_staff else None,
+            submission_date=event.submission_date,
+            province_id=event.cluster.province_id if event.cluster else None,
+            babies=[
+                BabyOut(
+                    id=b.id,
+                    name=b.name,
+                    sex=b.sex,
+                    preg_outcome_date=b.preg_outcome_date,
+                    weight=b.weight,
+                    is_birth_registered=b.is_birth_registered,
+                )
+                for b in event.babies.all()
+            ],
+        )
+
+
+class PaginatedPregnancyOutcomesOut(Schema):
+    items: list[PregnancyOutcomeOut]
     total: int
     page: int
     page_size: int
@@ -257,3 +331,67 @@ def update_death(request, death_id: int, payload: DeathUpdateSchema):
 
     death.save()
     return {"success": True, "message": "Death record updated."}
+
+
+# ──────────────────────────────────────────────
+# Pregnancy Outcome endpoints
+# ──────────────────────────────────────────────
+
+@api.get("/pregnancy-outcomes", auth=django_auth, response=PaginatedPregnancyOutcomesOut)
+def list_pregnancy_outcomes(
+    request,
+    province_id: Optional[int] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    q: Optional[str] = None,
+    page: int = 1,
+    page_size: int = 10,
+):
+    qs = Event.objects.filter(
+        event_type=Event.EventType.PREGNANCY_OUTCOME
+    ).select_related(
+        'cluster', 'area', 'event_staff'
+    ).prefetch_related('babies')
+
+    if province_id:
+        qs = qs.filter(cluster__province_id=province_id)
+
+    if start_date and end_date:
+        qs = qs.filter(preg_outcome_date__gte=parse_date(start_date), preg_outcome_date__lte=parse_date(end_date))
+    elif start_date:
+        qs = qs.filter(preg_outcome_date=parse_date(start_date))
+    elif end_date:
+        qs = qs.filter(preg_outcome_date=parse_date(end_date))
+
+    if q and q.strip():
+        query = q.strip()
+        qs = qs.filter(
+            Q(cluster_code__icontains=query) |
+            Q(mother_name__icontains=query)
+        )
+
+    qs = qs.order_by('-id')
+
+    paginator = Paginator(qs, page_size)
+    try:
+        page_obj = paginator.page(page)
+    except (PageNotAnInteger, EmptyPage):
+        page_obj = paginator.page(1)
+
+    return PaginatedPregnancyOutcomesOut(
+        items=[PregnancyOutcomeOut.from_event(e) for e in page_obj.object_list],
+        total=paginator.count,
+        page=page_obj.number,
+        page_size=page_size,
+        num_pages=paginator.num_pages,
+    )
+
+
+@api.get("/pregnancy-outcomes/{event_id}", auth=django_auth, response=PregnancyOutcomeOut)
+def get_pregnancy_outcome(request, event_id: int):
+    event = Event.objects.filter(
+        event_type=Event.EventType.PREGNANCY_OUTCOME
+    ).select_related(
+        'cluster', 'area', 'event_staff'
+    ).prefetch_related('babies').get(id=event_id)
+    return PregnancyOutcomeOut.from_event(event)

@@ -58,3 +58,34 @@ export interface PaginatedResponse<T> {
   page_size: number;
   num_pages: number;
 }
+
+export interface Baby {
+  id: number;
+  name: string | null;
+  sex: number | null;
+  preg_outcome_date: string | null;
+  weight: number | null;
+  is_birth_registered: boolean | null;
+}
+
+export interface PregnancyOutcome {
+  id: number;
+  cluster_code: string | null;
+  area_code: string | null;
+  preg_outcome_date: string | null;
+  mother_name: string | null;
+  mother_age_years: number | null;
+  birth_sing_outcome: number | null;
+  birth_sing_outcome_label: string | null;
+  birth_multi: number | null;
+  birth_multi_alive: number | null;
+  birth_multi_still: number | null;
+  household_code: string | null;
+  household_head_name: string | null;
+  respondent_name: string | null;
+  staff_code: string | null;
+  worker_name: string | null;
+  submission_date: string | null;
+  province_id: number | null;
+  babies: Baby[];
+}
