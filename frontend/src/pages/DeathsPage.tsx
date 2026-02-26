@@ -174,7 +174,7 @@ export default function DeathsPage() {
             <input
               type="text"
               className="form-input"
-              placeholder="Search"
+              placeholder="DEATH ID OR WORK AREA"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />

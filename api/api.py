@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import F, Value
+from django.db.models import F, Q, Value
 from django.db.models.functions import Coalesce
 from django.utils.dateparse import parse_date
 from typing import Optional
@@ -205,21 +205,15 @@ def list_deaths(
     elif end_date:
         qs = qs.filter(deceased_dod=parse_date(end_date))
 
-    # Trigram text search (mirrors the existing view logic)
+    # Partial match search on death code or work area/district
     if q and q.strip():
         query = q.strip()
-        similarity = (
-            0.5 * TrigramSimilarity(Coalesce(F('death_code'), Value('')), query) +
-            0.4 * TrigramSimilarity(Coalesce(F('va_staff__code'), Value('')), query) +
-            0.4 * TrigramSimilarity(Coalesce(F('event__event_staff__code'), Value('')), query) +
-            0.4 * TrigramSimilarity(Coalesce(F('event__area__code'), Value('')), query) +
-            0.4 * TrigramSimilarity(Coalesce(F('event__household_head_name'), Value('')), query) +
-            0.4 * TrigramSimilarity(Coalesce(F('deceased_name'), Value('')), query) +
-            0.4 * TrigramSimilarity(Coalesce(F('event__respondent_name'), Value('')), query)
+        qs = qs.filter(
+            Q(death_code__icontains=query) |
+            Q(event__area__code__icontains=query)
         )
-        qs = qs.annotate(similarity=similarity).filter(similarity__gte=0.05).order_by('-similarity')
-    else:
-        qs = qs.order_by('-id')
+
+    qs = qs.order_by('-id')
 
     paginator = Paginator(qs, page_size)
     try:
