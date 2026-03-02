@@ -275,9 +275,9 @@ def list_deaths(
     if start_date and end_date:
         qs = qs.filter(deceased_dod__gte=parse_date(start_date), deceased_dod__lte=parse_date(end_date))
     elif start_date:
-        qs = qs.filter(deceased_dod=parse_date(start_date))
+        qs = qs.filter(deceased_dod__gte=parse_date(start_date))
     elif end_date:
-        qs = qs.filter(deceased_dod=parse_date(end_date))
+        qs = qs.filter(deceased_dod__lte=parse_date(end_date))
 
     # Partial match search on death code or work area/district
     if q and q.strip():
@@ -359,9 +359,9 @@ def list_pregnancy_outcomes(
     if start_date and end_date:
         qs = qs.filter(preg_outcome_date__gte=parse_date(start_date), preg_outcome_date__lte=parse_date(end_date))
     elif start_date:
-        qs = qs.filter(preg_outcome_date=parse_date(start_date))
+        qs = qs.filter(preg_outcome_date__gte=parse_date(start_date))
     elif end_date:
-        qs = qs.filter(preg_outcome_date=parse_date(end_date))
+        qs = qs.filter(preg_outcome_date__lte=parse_date(end_date))
 
     if q and q.strip():
         query = q.strip()

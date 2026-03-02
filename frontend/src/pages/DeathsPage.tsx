@@ -5,7 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import type { Death, PaginatedResponse, Province } from "../types";
 import Pagination from "../components/Pagination";
 
-const PAGE_SIZES = [10, 25, 50, 100];
+const PAGE_SIZES = [2, 10, 25, 50, 100];
 
 // Death status integers from backend
 const STATUS_NEW = 0;
@@ -143,7 +143,7 @@ export default function DeathsPage() {
               <label className="form-label w-32" htmlFor="start_date">
                 Date of Death:
               </label>
-              <div className="form-input-wrapper">
+              <div className="form-input-wrapper flex items-center gap-2">
                 <input
                   type="date"
                   id="start_date"
@@ -151,14 +151,7 @@ export default function DeathsPage() {
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                 />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <label className="form-label w-10" htmlFor="end_date">
-                to:
-              </label>
-              <div className="form-input-wrapper">
+                <span className="text-sm text-slate-500">to</span>
                 <input
                   type="date"
                   id="end_date"
@@ -182,7 +175,7 @@ export default function DeathsPage() {
 
           <div className="form-row">
             <label className="form-label w-32" htmlFor="paging_size">
-              Results Count:
+              Page Size:
             </label>
             <div className="form-input-wrapper">
               <select
