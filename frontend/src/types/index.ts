@@ -82,6 +82,7 @@ export interface PregnancyOutcome {
   birth_multi_still: number | null;
   household_code: string | null;
   household_head_name: string | null;
+  head_phone: string | null;
   respondent_name: string | null;
   staff_code: string | null;
   worker_name: string | null;

@@ -137,6 +137,7 @@ class PregnancyOutcomeOut(Schema):
     birth_multi_still: Optional[int] = None
     household_code: Optional[str] = None
     household_head_name: Optional[str] = None
+    head_phone: Optional[str] = None
     respondent_name: Optional[str] = None
     staff_code: Optional[str] = None
     worker_name: Optional[str] = None
@@ -161,6 +162,7 @@ class PregnancyOutcomeOut(Schema):
             birth_multi_still=event.birth_multi_still,
             household_code=event.household_code,
             household_head_name=event.household_head_name,
+            head_phone=event.head_phone,
             respondent_name=event.respondent_name,
             staff_code=event.staff_code,
             worker_name=event_staff.full_name if event_staff else None,

@@ -127,6 +127,13 @@ export default function PregnancyOutcomeDetailPage() {
         </div>
 
         <div className="form-row">
+          <label className="form-label">HH Phone:</label>
+          <div className="form-input-wrapper">
+            <input type="text" className="form-input" value={record.head_phone ?? ""} readOnly />
+          </div>
+        </div>
+
+        <div className="form-row">
           <label className="form-label">Respondent:</label>
           <div className="form-input-wrapper">
             <input type="text" className="form-input" value={record.respondent_name ?? ""} readOnly />
