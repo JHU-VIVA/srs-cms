@@ -7,6 +7,8 @@ import DeathsPage from "./pages/DeathsPage";
 import DeathEditPage from "./pages/DeathEditPage";
 import PregnancyOutcomesPage from "./pages/PregnancyOutcomesPage";
 import PregnancyOutcomeDetailPage from "./pages/PregnancyOutcomeDetailPage";
+import HouseholdsPage from "./pages/HouseholdsPage";
+import HouseholdDetailPage from "./pages/HouseholdDetailPage";
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
             <Route path="/deaths/:id" element={<DeathEditPage />} />
             <Route path="/pregnancy-outcomes" element={<PregnancyOutcomesPage />} />
             <Route path="/pregnancy-outcomes/:id" element={<PregnancyOutcomeDetailPage />} />
+            <Route path="/households" element={<HouseholdsPage />} />
+            <Route path="/households/:id" element={<HouseholdDetailPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

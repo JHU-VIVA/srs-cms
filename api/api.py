@@ -11,6 +11,7 @@ from typing import Optional
 from datetime import date
 
 from api.models import Death, Event, Province, Staff
+from api.models.households import Household, HouseholdMember
 from api.common import Permissions
 
 api = NinjaAPI(csrf=True)
@@ -184,6 +185,67 @@ class PregnancyOutcomeOut(Schema):
 
 class PaginatedPregnancyOutcomesOut(Schema):
     items: list[PregnancyOutcomeOut]
+    total: int
+    page: int
+    page_size: int
+    num_pages: int
+
+
+class HouseholdMemberOut(Schema):
+    id: int
+    full_name: Optional[str] = None
+    sex: Optional[int] = None
+    age_in_years: Optional[int] = None
+    rel_head: Optional[int] = None
+    rel_head_label: Optional[str] = None
+
+
+class HouseholdOut(Schema):
+    id: int
+    cluster_code: Optional[str] = None
+    area_code: Optional[str] = None
+    interview_date: Optional[date] = None
+    household_code: Optional[str] = None
+    household_address: Optional[str] = None
+    rep_member_count: Optional[str] = None
+    household_head_name: Optional[str] = None
+    respondent_name: Optional[str] = None
+    head_phone: Optional[str] = None
+    submission_date: Optional[date] = None
+    province_id: Optional[int] = None
+    members: list[HouseholdMemberOut] = []
+
+    @staticmethod
+    def from_household(h):
+        return HouseholdOut(
+            id=h.id,
+            cluster_code=h.cluster_code,
+            area_code=h.area_code,
+            interview_date=h.interview_date,
+            household_code=h.household_code,
+            household_address=h.household_address,
+            rep_member_count=h.rep_member_count,
+            household_head_name=h.household_head_name,
+            respondent_name=h.respondent_name,
+            head_phone=h.head_phone,
+            submission_date=h.submission_date,
+            province_id=h.cluster.province_id if h.cluster else None,
+            members=[
+                HouseholdMemberOut(
+                    id=m.id,
+                    full_name=m.full_name,
+                    sex=m.sex,
+                    age_in_years=m.age_in_years,
+                    rel_head=m.rel_head,
+                    rel_head_label=HouseholdMember.RelationHeadType(m.rel_head).label if m.rel_head is not None else None,
+                )
+                for m in h.household_members.all()
+            ],
+        )
+
+
+class PaginatedHouseholdsOut(Schema):
+    items: list[HouseholdOut]
     total: int
     page: int
     page_size: int
@@ -397,3 +459,63 @@ def get_pregnancy_outcome(request, event_id: int):
         'cluster', 'area', 'event_staff'
     ).prefetch_related('babies').get(id=event_id)
     return PregnancyOutcomeOut.from_event(event)
+
+
+# ──────────────────────────────────────────────
+# Household endpoints
+# ──────────────────────────────────────────────
+
+@api.get("/households", auth=django_auth, response=PaginatedHouseholdsOut)
+def list_households(
+    request,
+    province_id: Optional[int] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    q: Optional[str] = None,
+    page: int = 1,
+    page_size: int = 10,
+):
+    qs = Household.objects.select_related(
+        'cluster', 'area', 'event_staff'
+    ).prefetch_related('household_members')
+
+    if province_id:
+        qs = qs.filter(cluster__province_id=province_id)
+
+    if start_date and end_date:
+        qs = qs.filter(interview_date__gte=parse_date(start_date), interview_date__lte=parse_date(end_date))
+    elif start_date:
+        qs = qs.filter(interview_date__gte=parse_date(start_date))
+    elif end_date:
+        qs = qs.filter(interview_date__lte=parse_date(end_date))
+
+    if q and q.strip():
+        query = q.strip()
+        qs = qs.filter(
+            Q(household_code__icontains=query) |
+            Q(cluster_code__icontains=query)
+        )
+
+    qs = qs.order_by('-id')
+
+    paginator = Paginator(qs, page_size)
+    try:
+        page_obj = paginator.page(page)
+    except (PageNotAnInteger, EmptyPage):
+        page_obj = paginator.page(1)
+
+    return PaginatedHouseholdsOut(
+        items=[HouseholdOut.from_household(h) for h in page_obj.object_list],
+        total=paginator.count,
+        page=page_obj.number,
+        page_size=page_size,
+        num_pages=paginator.num_pages,
+    )
+
+
+@api.get("/households/{household_id}", auth=django_auth, response=HouseholdOut)
+def get_household(request, household_id: int):
+    h = Household.objects.select_related(
+        'cluster', 'area', 'event_staff'
+    ).prefetch_related('household_members').get(id=household_id)
+    return HouseholdOut.from_household(h)

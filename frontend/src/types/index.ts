@@ -68,6 +68,31 @@ export interface Baby {
   is_birth_registered: boolean | null;
 }
 
+export interface HouseholdMember {
+  id: number;
+  full_name: string | null;
+  sex: number | null;
+  age_in_years: number | null;
+  rel_head: number | null;
+  rel_head_label: string | null;
+}
+
+export interface Household {
+  id: number;
+  cluster_code: string | null;
+  area_code: string | null;
+  interview_date: string | null;
+  household_code: string | null;
+  household_address: string | null;
+  rep_member_count: string | null;
+  household_head_name: string | null;
+  respondent_name: string | null;
+  head_phone: string | null;
+  submission_date: string | null;
+  province_id: number | null;
+  members: HouseholdMember[];
+}
+
 export interface PregnancyOutcome {
   id: number;
   cluster_code: string | null;
