@@ -11,6 +11,7 @@ pyodk = "==1.2.1"
 django-environ = "*"
 django-tailwind = { version = "*", extras = ["reload"] }
 python-dateutil = "*"
+openpyxl = "*"
 
 [dev-packages]
 pytest-django = "*"

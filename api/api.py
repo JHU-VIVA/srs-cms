@@ -1,6 +1,7 @@
 from ninja import NinjaAPI, Schema
 from ninja.security import django_auth
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse
 from django.middleware.csrf import get_token
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -9,6 +10,8 @@ from django.db.models.functions import Coalesce
 from django.utils.dateparse import parse_date
 from typing import Optional
 from datetime import date
+from io import BytesIO
+import openpyxl
 
 from api.models import Death, Event, Province, Staff
 from api.models.households import Household, HouseholdMember
@@ -401,16 +404,7 @@ def update_death(request, death_id: int, payload: DeathUpdateSchema):
 # Pregnancy Outcome endpoints
 # ──────────────────────────────────────────────
 
-@api.get("/pregnancy-outcomes", auth=django_auth, response=PaginatedPregnancyOutcomesOut)
-def list_pregnancy_outcomes(
-    request,
-    province_id: Optional[int] = None,
-    start_date: Optional[str] = None,
-    end_date: Optional[str] = None,
-    q: Optional[str] = None,
-    page: int = 1,
-    page_size: int = 10,
-):
+def _filter_pregnancy_outcomes(province_id=None, start_date=None, end_date=None, q=None):
     qs = Event.objects.filter(
         event_type=Event.EventType.PREGNANCY_OUTCOME
     ).select_related(
@@ -434,7 +428,20 @@ def list_pregnancy_outcomes(
             Q(mother_name__icontains=query)
         )
 
-    qs = qs.order_by('-id')
+    return qs.order_by('-id')
+
+
+@api.get("/pregnancy-outcomes", auth=django_auth, response=PaginatedPregnancyOutcomesOut)
+def list_pregnancy_outcomes(
+    request,
+    province_id: Optional[int] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    q: Optional[str] = None,
+    page: int = 1,
+    page_size: int = 10,
+):
+    qs = _filter_pregnancy_outcomes(province_id, start_date, end_date, q)
 
     paginator = Paginator(qs, page_size)
     try:
@@ -449,6 +456,46 @@ def list_pregnancy_outcomes(
         page_size=page_size,
         num_pages=paginator.num_pages,
     )
+
+
+@api.get("/pregnancy-outcomes/export", auth=django_auth)
+def export_pregnancy_outcomes(
+    request,
+    province_id: Optional[int] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    q: Optional[str] = None,
+):
+    qs = _filter_pregnancy_outcomes(province_id, start_date, end_date, q)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Pregnancy Outcomes"
+    ws.append(["Cluster Code", "Work Area", "Outcome Date", "Mother Name", "Baby Count", "Outcome Type"])
+
+    for event in qs:
+        outcome_label = Event.BirthOutcomeType(event.birth_sing_outcome).label if event.birth_sing_outcome is not None else ""
+        baby_count = event.babies.count()
+        ws.append([
+            event.cluster_code or "",
+            event.area_code or "",
+            str(event.preg_outcome_date) if event.preg_outcome_date else "",
+            event.mother_name or "",
+            baby_count,
+            outcome_label,
+        ])
+
+    buf = BytesIO()
+    wb.save(buf)
+    buf.seek(0)
+
+    response = HttpResponse(
+        buf.getvalue(),
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    today = date.today().strftime("%Y-%m-%d")
+    response["Content-Disposition"] = f'attachment; filename="pregnancy_outcomes_{today}.xlsx"'
+    return response
 
 
 @api.get("/pregnancy-outcomes/{event_id}", auth=django_auth, response=PregnancyOutcomeOut)
