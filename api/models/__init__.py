@@ -6,3 +6,4 @@ from .models import (User, OdkProject,
 from .events import (Event, Baby, Death)
 from .households import (Household, HouseholdMember)
 from .verbal_autopsies import (VerbalAutopsy)
+from .dashboard import DashboardStat
