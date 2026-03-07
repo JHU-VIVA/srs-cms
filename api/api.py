@@ -255,6 +255,12 @@ class PaginatedHouseholdsOut(Schema):
     num_pages: int
 
 
+class DashboardStatOut(Schema):
+    metric: str
+    province_id: Optional[int] = None
+    count: int
+
+
 # ──────────────────────────────────────────────
 # Auth endpoints
 # ──────────────────────────────────────────────
@@ -471,12 +477,18 @@ def export_pregnancy_outcomes(
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Pregnancy Outcomes"
-    ws.append(["Cluster Code", "Work Area", "Outcome Date", "Mother Name", "Baby Count", "Outcome Type"])
+    ws.append(["Key", "Cluster Code", "Work Area", "Outcome Date", "Mother Name", "Baby Count", "Outcome Type"])
+
+    ws_babies = wb.create_sheet("Babies")
+    ws_babies.append(["Key", "Name", "Sex", "Outcome Date", "Weight", "Registered"])
+
+    sex_map = {1: "Male", 2: "Female"}
 
     for event in qs:
         outcome_label = Event.BirthOutcomeType(event.birth_sing_outcome).label if event.birth_sing_outcome is not None else ""
         baby_count = event.babies.count()
         ws.append([
+            event.id,
             event.cluster_code or "",
             event.area_code or "",
             str(event.preg_outcome_date) if event.preg_outcome_date else "",
@@ -484,6 +496,15 @@ def export_pregnancy_outcomes(
             baby_count,
             outcome_label,
         ])
+        for baby in event.babies.all():
+            ws_babies.append([
+                event.id,
+                baby.name or "",
+                sex_map.get(baby.sex, ""),
+                str(baby.preg_outcome_date) if baby.preg_outcome_date else "",
+                baby.weight if baby.weight is not None else "",
+                "Yes" if baby.is_birth_registered else "No" if baby.is_birth_registered is not None else "",
+            ])
 
     buf = BytesIO()
     wb.save(buf)
@@ -566,3 +587,14 @@ def get_household(request, household_id: int):
         'cluster', 'area', 'event_staff'
     ).prefetch_related('household_members').get(id=household_id)
     return HouseholdOut.from_household(h)
+
+
+# ──────────────────────────────────────────────
+# Dashboard endpoints
+# ──────────────────────────────────────────────
+
+@api.get("/dashboard-stats", auth=django_auth, response=list[DashboardStatOut])
+def get_dashboard_stats(request):
+    from api.models.dashboard import DashboardStat
+    stats = DashboardStat.objects.all()
+    return [{"metric": s.metric, "province_id": s.province_id, "count": s.count} for s in stats]
