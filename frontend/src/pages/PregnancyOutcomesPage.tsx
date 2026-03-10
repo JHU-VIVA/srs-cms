@@ -1,0 +1,265 @@
+import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { getPregnancyOutcomes, exportPregnancyOutcomes } from "../api/pregnancyOutcomes";
+import { getProvinces } from "../api/deaths";
+import type { PregnancyOutcome, PaginatedResponse, Province } from "../types";
+import Pagination from "../components/Pagination";
+
+const PAGE_SIZES = [2, 10, 25, 50, 100];
+
+export default function PregnancyOutcomesPage() {
+  const [provinces, setProvinces] = useState<Province[]>([]);
+  const [data, setData] = useState<PaginatedResponse<PregnancyOutcome> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Filters
+  const [provinceId, setProvinceId] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [query, setQuery] = useState("");
+  const [pageSize, setPageSize] = useState(25);
+  const [page, setPage] = useState(1);
+  const [exporting, setExporting] = useState(false);
+
+  useEffect(() => {
+    getProvinces().then(setProvinces).catch(() => {});
+  }, []);
+
+  const fetchData = useCallback(() => {
+    setLoading(true);
+    setError("");
+    getPregnancyOutcomes({
+      province_id: provinceId,
+      start_date: startDate,
+      end_date: endDate,
+      q: query,
+      page,
+      page_size: pageSize,
+    })
+      .then(setData)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, [provinceId, startDate, endDate, query, pageSize, page]);
+
+  useEffect(fetchData, [fetchData]);
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    setPage(1);
+  }
+
+  function handleExport() {
+    setExporting(true);
+    exportPregnancyOutcomes({
+      province_id: provinceId,
+      start_date: startDate,
+      end_date: endDate,
+      q: query,
+    })
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        const today = new Date().toISOString().slice(0, 10);
+        a.download = `pregnancy_outcomes_${today}.xlsx`;
+        a.click();
+        URL.revokeObjectURL(url);
+      })
+      .catch(() => {})
+      .finally(() => setExporting(false));
+  }
+
+  function handleReset() {
+    setProvinceId("");
+    setStartDate("");
+    setEndDate("");
+    setQuery("");
+    setPageSize(25);
+    setPage(1);
+  }
+
+  if (loading && !data) {
+    return (
+      <div className="flex justify-center py-10">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="py-4">
+        <div className="alert alert-error">{error}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-6 animate-fade-in">
+      <h1 className="text-2xl font-bold mb-5 text-slate-800">Pregnancy Outcomes</h1>
+
+      {/* Filters */}
+      <div className="glass-card p-5 mb-6">
+        <form onSubmit={handleSearch}>
+          <div className="columns-sm">
+            <div className="form-row">
+              <label className="form-label w-20" htmlFor="province">
+                Province:
+              </label>
+              <div className="form-input-wrapper">
+                <select
+                  id="province"
+                  className="select select-bordered form-input"
+                  value={provinceId}
+                  onChange={(e) => {
+                    setProvinceId(e.target.value);
+                    setPage(1);
+                  }}
+                >
+                  <option value="">All Provinces</option>
+                  {provinces.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="form-row">
+              <label className="form-label w-32" htmlFor="start_date">
+                Outcome Date:
+              </label>
+              <div className="form-input-wrapper flex items-center gap-2">
+                <input
+                  type="date"
+                  id="start_date"
+                  className="form-input"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+                <span className="text-sm text-slate-500">to</span>
+                <input
+                  type="date"
+                  id="end_date"
+                  className="form-input"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="py-4">
+            <input
+              type="text"
+              className="form-input"
+              placeholder="CLUSTER CODE OR MOTHER NAME"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+
+          <div className="form-row">
+            <label className="form-label w-32" htmlFor="paging_size">
+              Page Size:
+            </label>
+            <div className="form-input-wrapper">
+              <select
+                id="paging_size"
+                className="select select-bordered form-input w-20"
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                  setPage(1);
+                }}
+              >
+                {PAGE_SIZES.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="flex gap-2 mt-2">
+            <button type="submit" className="btn btn-sm btn-primary">
+              Search
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-ghost"
+              onClick={handleReset}
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Results table */}
+      {data && (
+        <div className="section-card animate-slide-up">
+          <div className="section-header">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-purple-400"></span>
+              <span className="section-title">Pregnancy Outcomes</span>
+              <span className="section-count">({data.total})</span>
+              <button
+                className="btn btn-xs btn-outline btn-success ml-2"
+                onClick={handleExport}
+                disabled={exporting}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+                {exporting ? "Exporting..." : "Download Excel"}
+              </button>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="table-enhanced w-full">
+              <thead>
+                <tr>
+                  <th>Cluster</th>
+                  <th>Work Area</th>
+                  <th>Outcome Date</th>
+                  <th>Mother Name</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.items.map((po) => (
+                  <tr key={po.id}>
+                    <td className="font-mono text-xs">{po.cluster_code}</td>
+                    <td>{po.area_code}</td>
+                    <td>{po.preg_outcome_date}</td>
+                    <td className="font-medium">{po.mother_name}</td>
+                    <td>
+                      <Link
+                        to={`/pregnancy-outcomes/${po.id}`}
+                        className="btn btn-ghost btn-xs text-primary hover:bg-primary/10"
+                      >
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="px-5 py-2">
+            <Pagination
+              page={page}
+              total={data.total}
+              pageSize={pageSize}
+              onPageChange={setPage}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

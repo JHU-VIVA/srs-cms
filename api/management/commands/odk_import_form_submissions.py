@@ -90,6 +90,11 @@ class Command(BaseCommand):
             verbose=verbose
         ).execute()
 
+        # Refresh dashboard stats after import
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute('REFRESH MATERIALIZED VIEW dashboard_stats;')
+
         if odk_import_result.errors:
             sys.exit(1)
         else:
