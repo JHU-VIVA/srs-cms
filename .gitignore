@@ -43,3 +43,6 @@ scripts/nmig/config/config.json
 
 *.bat
 test.py
+
+# Playwright
+frontend/test-results/
