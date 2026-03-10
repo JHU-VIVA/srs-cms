@@ -1,5 +1,3 @@
-from email.policy import default
-
 from api.odk.importers.form_submissions.form_submission_importer_base import FromSubmissionImporterBase
 from api.odk.importers.form_submissions.form_submission_importer_factory import FromSubmissionImporterFactory
 from api.models import Event, Baby
@@ -41,7 +39,7 @@ class BabiesImporter(FromSubmissionImporterBase):
 
             errors = []
             if event is None:
-                errors.append(f"Event not found: {event_key or "NULL"}")
+                errors.append(f"Event not found: {event_key or 'NULL'}")
 
             if not errors:
                 new_baby.event = event
