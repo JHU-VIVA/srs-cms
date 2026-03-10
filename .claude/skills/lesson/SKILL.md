@@ -1,5 +1,5 @@
 ---
-name: minimal-change-first
+name: lesson
 description: Anti-over-engineering guard for feature design and implementation. This skill should be used when designing solutions, writing implementation plans, or proposing architectural changes. Triggers on brainstorming sessions, design proposals, new feature planning, or any task where the instinct is to create new files, modules, or commands. Forces a systematic check against existing code before building anything new.
 ---
 
