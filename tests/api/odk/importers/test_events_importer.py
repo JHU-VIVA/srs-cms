@@ -1,7 +1,7 @@
 import pytest
 from api.odk.importers.form_submissions.events_importer import EventsImporter
 from api.odk.importers.form_submissions.form_submission_importer_factory import FromSubmissionImporterFactory
-from api.models import Event
+from api.models import Event, Cluster, Area, Staff
 from tests.factories.factories import OdkProjectFactory, FormSubmissionFactory, ProvinceFactory
 
 DEFAULT_FORM_SUBMISSION_COUNT = 3
@@ -62,3 +62,45 @@ def test_it_does_not_import_duplicate_events(setup, expect_odk_form_submission_i
     importer = EventsImporter(odk_form, odk_form_importer)
     result = importer.execute()
     expect_odk_form_submission_import_result(result, imported_models_count=0)
+
+
+@pytest.mark.django_db
+def test_it_auto_creates_missing_references(setup, expect_odk_form_submission_import_result, monkeypatch):
+    """When DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING=True, missing cluster/area/staff are auto-created."""
+    monkeypatch.setenv('DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING', 'True')
+
+    nonexistent_cluster_code = 'NEWCLUSTER99'
+    nonexistent_area_code = 'NEWAREA99'
+    nonexistent_staff_code = 'NEWSTAFF99'
+
+    # Create form submissions with codes that don't exist in DB
+    form_submissions = []
+    odk_form, odk_form_importer, form_submissions = setup(
+        form_submission_count=0,
+        form_submissions=form_submissions,
+    )
+    event_etl_document = odk_form_importer.etl_document
+
+    form_submissions.append(
+        FormSubmissionFactory.create_event(
+            event_etl_document,
+            cluster_id=nonexistent_cluster_code,
+            area_id=nonexistent_area_code,
+            staff_id=nonexistent_staff_code,
+        )
+    )
+
+    importer = EventsImporter(odk_form, odk_form_importer)
+    result = importer.execute()
+    expect_odk_form_submission_import_result(result, imported_models_count=1)
+
+    # Verify the references were auto-created
+    assert Cluster.objects.filter(code=nonexistent_cluster_code).exists()
+    assert Area.objects.filter(code=nonexistent_area_code).exists()
+    assert Staff.objects.filter(code=nonexistent_staff_code).exists()
+
+    # Verify the imported event is linked to the auto-created records
+    imported_event = result.imported_models[0]
+    assert imported_event.cluster.code == nonexistent_cluster_code
+    assert imported_event.area.code == nonexistent_area_code
+    assert imported_event.event_staff.code == nonexistent_staff_code
