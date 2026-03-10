@@ -1,4 +1,4 @@
-# ODK Fetch Dev Data — Design
+# ODK Dev Data Import — Design
 
 ## Problem
 
@@ -6,105 +6,53 @@ The project needs realistic test/dev data from real ODK Central submissions. Cur
 - `dev_generate_test_data` generates synthetic data via Faker (only Deaths)
 - `odk_import_form_submissions` fetches real ODK data but fails when reference data (Province, Cluster, Area, Staff) doesn't match local DB
 - `DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING=True` falls back to `objects.first()` which lumps all mismatched records into one location
-- No deduplication or data cleaning
 
-## Solution
+## Solution (Implemented)
 
-New management command `odk_fetch_dev_data` that fetches real Events + Households submissions from ODK Central with automatic reference data reconciliation, deduplication, and data cleaning.
+Improved the existing `DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING` logic in `EventsImporter` and `HouseholdsImporter`. Instead of falling back to `objects.first()`, they now use `ReferenceResolver` to auto-create missing Cluster, Area, and Staff records with proper names and relationships.
 
-## Architecture
+No new management command was needed — the existing `odk_import_form_submissions` now handles missing reference data correctly.
 
-```
-odk_fetch_dev_data command
-    |
-    +-- 1. Connect to ODK Central (reuse OdkConfig.from_env())
-    |
-    +-- 2. Fetch raw submissions (Events + Households)
-    |      reuse pyodk client.submissions.get_table()
-    |
-    +-- 3. Pre-scan & reconcile reference data
-    |      +-- Extract unique cluster_id, area_id, staff_id
-    |      +-- Extract GPS coordinates per cluster/area
-    |      +-- Auto-create missing Provinces (group by GPS proximity)
-    |      +-- Auto-create missing Clusters (use centroid GPS)
-    |      +-- Auto-create missing Areas (link to cluster)
-    |      +-- Auto-create missing Staff (link to cluster, infer type)
-    |
-    +-- 4. Clean & deduplicate submissions
-    |      +-- Skip submissions whose key already exists in DB
-    |      +-- Filter out records with missing required fields
-    |      +-- Normalize field values (whitespace, dates)
-    |      +-- Log skipped/cleaned records
-    |
-    +-- 5. Run existing import pipeline
-           reuse FromSubmissionImporterBase.import_submissions()
-           pass pre-fetched form_submissions (bypass live API call)
-           child importers (Deaths, Babies, HouseholdMembers) run automatically
-```
+## What Changed
 
-## Scope
+### New: `api/odk/dev/reference_resolver.py`
 
-### Forms to fetch
-- **Events** -> Event, Death, Baby models
-- **Households** -> Household, HouseholdMember models
-- No Verbal Autopsies
+`ReferenceResolver` class with three classmethods:
+- `resolve_cluster(code)` — finds existing or creates `Imported-{code}` cluster, assigns to a province
+- `resolve_area(code, cluster)` — finds existing or creates area linked to cluster
+- `resolve_staff(code, cluster)` — finds existing or creates CSA staff linked to cluster
+- `_get_or_create_province()` — uses existing province if only one exists, otherwise creates "IM"/"Imported" province
 
-### Data handling
-- No anonymization (sandbox/test ODK project data)
-- No JSON file caching (fetches live each time)
-- Does not modify existing records (skip duplicates)
+### Modified: `EventsImporter.on_before_save_model()`
 
-## Command Interface
+When `DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING=True` and `find_by()` returns None, calls `ReferenceResolver` instead of `objects.first()`.
+
+### Modified: `HouseholdsImporter.on_before_save_model()`
+
+Same change as EventsImporter.
+
+### Child importers unchanged
+
+`DeathsImporter`, `BabiesImporter`, `HouseholdMembersImporter` were not modified — they resolve parent models (Event, Household) not reference data, and the parents are now correctly imported with proper references.
+
+## Usage
 
 ```bash
-python manage.py odk_fetch_dev_data \
-    --projects 6 \
-    --forms events households \
-    --start-date 2025-01-01 \
-    --end-date 2026-03-10 \
-    --limit 100 \
-    --verbose
+# 1. Seed reference data and ODK config
+python manage.py seed_database --stage dev
+
+# 2. Set env var to enable auto-creation of missing references
+export DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING=True
+
+# 3. Import real ODK data (same command as production)
+python manage.py odk_import_form_submissions --projects 6 --verbose
 ```
 
-### Arguments
-- `--projects`: ODK project ID(s). Defaults to all enabled projects.
-- `--forms`: Which form types to fetch. Choices: `events`, `households`. Defaults to both.
-- `--start-date` / `--end-date`: Submission date range filter. Optional.
-- `--limit`: Max submissions per form type. Optional (useful for quick dev seeding).
-- `--verbose`: Show detailed progress.
-
-## Reference Data Reconciliation (GIS-Aware)
-
-When a submission references a cluster/area/staff that doesn't exist locally:
-
-1. **Cluster**: Create with the code from submission. Use GPS centroid (average lat/lon across all submissions for that cluster) as geographic reference. Assign to an existing Province by GPS proximity, or create a default "Imported" Province.
-
-2. **Area**: Create with the code from submission. Link to the resolved Cluster.
-
-3. **Staff**: Create with the code from submission. Link to the resolved Cluster. Infer staff_type (CSA) from the form context (Events/Households forms are submitted by CSA workers).
-
-4. **Province**: If no existing Province is geographically close to the cluster centroid, create a default "Imported" Province to hold orphan clusters.
+The key difference from before: instead of `objects.first()` silently assigning everything to the same Cluster/Area/Staff, the `ReferenceResolver` creates properly named records (`Imported-CL001`, `Imported-ST001`) with correct relationships.
 
 ## Deduplication
 
-- Before importing, check the `key` field (derived from `__id`) against existing records
-- Skip and log any duplicates found
-- This prevents errors on re-runs
-
-## Data Cleaning
-
-Between fetch and import:
-- Filter out submissions missing `cluster_id`, `area_id`, or `staff_id`
-- Strip whitespace from string fields
-- Log any submissions that fail cleaning with reason
-
-## Integration with Existing Infrastructure
-
-- Reuses `OdkConfig.from_env()` for ODK Central connection
-- Reuses `FromSubmissionImporterBase.import_submissions()` via `form_submissions` parameter (bypasses live API fetch)
-- Works with existing ETL mappings and transformers
-- Can be called from `SeedLoader.generate_test_data()` for both dev and test stages
-- Does NOT replace `dev_generate_test_data` (Faker fallback for offline use)
+Handled by the existing import pipeline — `FromSubmissionImporterBase.import_submissions()` checks for existing records by primary key and skips duplicates.
 
 ## Dependencies
 
