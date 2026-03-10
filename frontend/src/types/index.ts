@@ -93,6 +93,12 @@ export interface Household {
   members: HouseholdMember[];
 }
 
+export interface DashboardStat {
+  metric: string;
+  province_id: number | null;
+  count: number;
+}
+
 export interface PregnancyOutcome {
   id: number;
   cluster_code: string | null;

@@ -595,6 +595,8 @@ def get_household(request, household_id: int):
 
 @api.get("/dashboard-stats", auth=django_auth, response=list[DashboardStatOut])
 def get_dashboard_stats(request):
-    from api.models.dashboard import DashboardStat
-    stats = DashboardStat.objects.all()
-    return [{"metric": s.metric, "province_id": s.province_id, "count": s.count} for s in stats]
+    from django.db import connection
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT metric, province_id, count FROM dashboard_stats")
+        rows = cursor.fetchall()
+    return [{"metric": r[0], "province_id": r[1], "count": r[2]} for r in rows]

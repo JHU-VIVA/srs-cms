@@ -9,6 +9,7 @@ import PregnancyOutcomesPage from "./pages/PregnancyOutcomesPage";
 import PregnancyOutcomeDetailPage from "./pages/PregnancyOutcomeDetailPage";
 import HouseholdsPage from "./pages/HouseholdsPage";
 import HouseholdDetailPage from "./pages/HouseholdDetailPage";
+import DashboardPage from "./pages/DashboardPage";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route element={<Layout />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/deaths" element={<DeathsPage />} />
             <Route path="/deaths/:id" element={<DeathEditPage />} />
             <Route path="/pregnancy-outcomes" element={<PregnancyOutcomesPage />} />
