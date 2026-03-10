@@ -38,7 +38,7 @@ class HouseholdMembersImporter(FromSubmissionImporterBase):
 
             errors = []
             if household is None:
-                errors.append(f"Household not found: {household_key or "NULL"}")
+                errors.append(f"Household not found: {household_key or 'NULL'}")
 
             if not errors:
                 new_household_member.household = household

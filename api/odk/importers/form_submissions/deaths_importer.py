@@ -45,7 +45,7 @@ class DeathsImporter(FromSubmissionImporterBase):
 
             errors = []
             if event is None:
-                errors.append(f"Event not found: {event_key or "NULL"}")
+                errors.append(f"Event not found: {event_key or 'NULL'}")
 
             if not errors:
                 # TODO: do we need to set the death_type here? Where does death_type map from? See TODO in ETL.
