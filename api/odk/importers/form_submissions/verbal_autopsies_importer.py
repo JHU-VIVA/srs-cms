@@ -1,4 +1,5 @@
 from api.odk.importers.form_submissions.form_submission_importer_base import FromSubmissionImporterBase
+from api.odk.dev.reference_resolver import ReferenceResolver
 from api.models import VerbalAutopsy, Cluster, Area, Death
 from config.env import Env
 
@@ -18,24 +19,27 @@ class VerbalAutopsiesImporter(FromSubmissionImporterBase):
     def on_before_save_model(self, new_va, etl_record, form_submission):
         use_existing_if_missing = Env.get("DEV_ODK_IMPORT_USE_EXISTING_IF_MISSING", cast=bool, default=False)
         try:
-            cluster = (Cluster.find_by(code=new_va.cluster_code) or
-                       (Cluster.objects.first() if use_existing_if_missing else None))
-            area = (Area.find_by(code=new_va.area_code) or
-                    (Area.objects.first() if use_existing_if_missing else None))
+            cluster = Cluster.find_by(code=new_va.cluster_code)
+            area = Area.find_by(code=new_va.area_code)
 
-            death = ((Death.find_by(death_code=new_va.death_code)) or
-                     (
-                         (Death.objects.filter(va_completed_date=None, death_code__istartswith=cluster.code).first() or
-                          Death.objects.filter(va_completed_date=None).first()) if use_existing_if_missing else None)
-                     )
+            if use_existing_if_missing:
+                if not cluster:
+                    cluster = ReferenceResolver.resolve_cluster(new_va.cluster_code)
+                if not area:
+                    area = ReferenceResolver.resolve_area(new_va.area_code, cluster)
+
+            death = Death.find_by(death_code=new_va.death_code)
+            if not death and use_existing_if_missing and cluster:
+                death = (Death.objects.filter(va_completed_date=None, death_code__istartswith=cluster.code).first() or
+                         Death.objects.filter(va_completed_date=None).first())
 
             errors = []
             if cluster is None:
-                errors.append(f"Cluster not found: {new_va.cluster_code or "NULL"}")
+                errors.append(f"Cluster not found: {new_va.cluster_code or 'NULL'}")
             if area is None:
-                errors.append(f"Area not found: {new_va.area_code or "NULL"}")
+                errors.append(f"Area not found: {new_va.area_code or 'NULL'}")
             if death is None:
-                errors.append(f"Death not found: {new_va.death_code or "NULL"}")
+                errors.append(f"Death not found: {new_va.death_code or 'NULL'}")
 
             if not errors:
                 new_va.cluster = cluster
