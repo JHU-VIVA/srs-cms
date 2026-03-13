@@ -3,6 +3,24 @@ from api.data.seeds.seed_loader import SeedLoader
 from api.models import OdkProject
 
 
+def pytest_sessionstart(session):
+    """Install pg_trgm before migrations run (needed for gin_trgm_ops indexes).
+
+    Uses a hook (not a fixture) to guarantee the signal is connected before
+    pytest-django's setup_databases() calls migrate.
+    Mirrors what init_database.py does for production.
+    """
+    from django.db.models.signals import pre_migrate
+
+    def install_extension(sender, using, **kwargs):
+        from django.db import connections
+        with connections[using].cursor() as cursor:
+            cursor.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm;")
+        pre_migrate.disconnect(install_extension)
+
+    pre_migrate.connect(install_extension)
+
+
 @pytest.fixture(autouse=True)
 def auto_set_env(monkeypatch):
     # Disable this setting for all tests.
