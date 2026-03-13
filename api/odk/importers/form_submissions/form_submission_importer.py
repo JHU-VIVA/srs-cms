@@ -3,7 +3,7 @@ from api.odk.importers.form_submissions.form_submission_import_result import Fro
 from api.common import Utils
 from api.models import OdkProject, OdkForm, OdkFormImporterJob
 from api.odk import OdkConfig
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from django.db import models
 
 
@@ -21,7 +21,7 @@ class FromSubmissionImporter:
         self.out_dir = Utils.expand_path(out_dir) if out_dir else None
         self.verbose = verbose is True
         self.result = FromSubmissionImportResult()
-        self._importer_started_at = Utils.to_aware_datetime(datetime.now())
+        self._importer_started_at = datetime.now(timezone.utc)
 
     def execute(self):
         try:
