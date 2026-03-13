@@ -49,6 +49,9 @@ test.describe('Households Page', () => {
       await page.getByRole('button', { name: /search/i }).click();
       await page.waitForLoadState('networkidle');
 
+      // Wait for the results count to show (0) indicating no matches
+      await expect(page.locator('text=(0)')).toBeVisible({ timeout: 5000 });
+
       // Should show empty or no results
       const tableRows = page.locator('table tbody tr');
       const rowCount = await tableRows.count();
