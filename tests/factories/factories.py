@@ -10,10 +10,12 @@ from api.models import (OdkProject, OdkForm, EtlDocument, EtlMapping,
                         Event, Death, Baby,
                         Household, HouseholdMember,
                         VerbalAutopsy,
-                        OdkFormImporter)
+                        OdkFormImporter,
+                        OdkEntityList, OdkEntityListExporter)
 from api.common import Utils, TypeCaster
 from api.data.seeds.seed_loader import SeedLoader
 from api.odk.importers.form_submissions.form_submission_importer_factory import FromSubmissionImporterFactory
+from api.odk.exporters.entity_lists.entity_list_exporter_factory import EntityListExporterFactory
 from faker import Faker
 
 fake = Faker()
@@ -640,3 +642,22 @@ class FormSubmissionFactory(factory.Factory):
                 last_obj = last_obj[prop]
 
         return result
+
+
+class OdkEntityListModelFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = OdkEntityList
+
+    odk_project = factory.SubFactory(OdkProjectFactory)
+    name = factory.LazyFunction(lambda: f"entity-list-{uuid.uuid4().hex[:8]}")
+    is_enabled = True
+
+
+class OdkEntityListExporterModelFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = OdkEntityListExporter
+
+    odk_entity_list = factory.SubFactory(OdkEntityListModelFactory)
+    etl_document = factory.SubFactory(EtlDocumentFactory)
+    exporter = EntityListExporterFactory.ODK_VA_PRELOAD_EXPORTER_NAME
+    is_enabled = True
