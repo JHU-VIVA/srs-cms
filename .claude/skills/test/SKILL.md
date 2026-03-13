@@ -93,10 +93,31 @@ AI agent-driven visual testing using `claude-in-chrome` browser automation. Clau
 
 #### Login
 
-1. Use `find` to locate the username and password fields
-2. Use `form_input` to fill username: `admin`, password: `admin`
-3. Use `find` to locate the login/submit button, then `computer` with `left_click` to submit
-4. Wait for redirect to `/dashboard`
+**Important:** This is a React app with controlled inputs. `form_input` sets DOM values but does NOT trigger React state updates. Use `javascript_tool` instead:
+
+```javascript
+const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+const usernameInput = document.querySelector('input[type="text"]');
+const passwordInput = document.querySelector('input[type="password"]');
+nativeInputValueSetter.call(usernameInput, 'admin');
+usernameInput.dispatchEvent(new Event('input', { bubbles: true }));
+nativeInputValueSetter.call(passwordInput, 'admin');
+passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
+document.querySelector('form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+```
+
+Wait 3 seconds, then verify URL changed to `/dashboard`.
+
+#### Navigation Tips
+
+- **Page navigation:** Use `navigate` tool with direct URLs (e.g., `http://localhost:3000/deaths`) rather than clicking header links, which may not respond reliably.
+- **Detail pages:** Click "View"/"Edit"/"Schedule VA" links in tables, or navigate directly (e.g., `http://localhost:3000/households/2`).
+- **Logout:** The avatar dropdown uses CSS `visibility: hidden` and requires hover. Use `javascript_tool` to click:
+  ```javascript
+  const logoutBtn = Array.from(document.querySelectorAll('button')).find(b => b.textContent.trim() === 'Logout');
+  let el = logoutBtn; while (el) { el.style.visibility = 'visible'; el = el.parentElement; }
+  logoutBtn.click();
+  ```
 
 #### Page Checkpoints
 
