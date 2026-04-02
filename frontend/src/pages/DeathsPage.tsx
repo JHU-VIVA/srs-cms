@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { getDeaths, getProvinces } from "../api/deaths";
+import { getDeaths, getProvinces, exportDeaths } from "../api/deaths";
 import { useAuth } from "../hooks/useAuth";
 import type { Death, PaginatedResponse, Province } from "../types";
 import Pagination from "../components/Pagination";
@@ -26,6 +26,9 @@ export default function DeathsPage() {
   const [completedDeaths, setCompletedDeaths] = useState<PaginatedResponse<Death> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [exportingNew, setExportingNew] = useState(false);
+  const [exportingScheduled, setExportingScheduled] = useState(false);
+  const [exportingCompleted, setExportingCompleted] = useState(false);
 
   // Filters
   const [provinceId, setProvinceId] = useState("");
@@ -85,6 +88,28 @@ export default function DeathsPage() {
     setNewPage(1);
     setScheduledPage(1);
     setCompletedPage(1);
+  }
+
+  function handleExport(status: number, setExporting: (v: boolean) => void, label: string) {
+    setExporting(true);
+    exportDeaths({
+      status,
+      province_id: provinceId,
+      start_date: startDate,
+      end_date: endDate,
+      q: query,
+    })
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        const today = new Date().toISOString().slice(0, 10);
+        a.download = `deaths_${label}_${today}.xlsx`;
+        a.click();
+        URL.revokeObjectURL(url);
+      })
+      .catch(() => {})
+      .finally(() => setExporting(false));
   }
 
   const canScheduleVa = user?.permissions.can_schedule_va ?? false;
@@ -225,6 +250,8 @@ export default function DeathsPage() {
           actionLabel="Schedule VA"
           columns="new"
           statusColor="blue"
+          exporting={exportingNew}
+          onExport={() => handleExport(STATUS_NEW, setExportingNew, "new")}
         />
       )}
 
@@ -240,6 +267,8 @@ export default function DeathsPage() {
           actionLabel="Edit"
           columns="new"
           statusColor="amber"
+          exporting={exportingScheduled}
+          onExport={() => handleExport(STATUS_SCHEDULED, setExportingScheduled, "scheduled")}
         />
       )}
 
@@ -255,6 +284,8 @@ export default function DeathsPage() {
           actionLabel="View"
           columns="completed"
           statusColor="emerald"
+          exporting={exportingCompleted}
+          onExport={() => handleExport(STATUS_COMPLETED, setExportingCompleted, "completed")}
         />
       )}
     </div>
@@ -271,6 +302,8 @@ interface DeathTableProps {
   actionLabel: string;
   columns: "new" | "completed";
   statusColor: keyof typeof STATUS_COLORS;
+  exporting: boolean;
+  onExport: () => void;
 }
 
 function DeathTable({
@@ -283,6 +316,8 @@ function DeathTable({
   actionLabel,
   columns,
   statusColor,
+  exporting,
+  onExport,
 }: DeathTableProps) {
   return (
     <div className="section-card animate-slide-up">
@@ -291,6 +326,16 @@ function DeathTable({
           <span className={`w-2.5 h-2.5 rounded-full ${STATUS_COLORS[statusColor]}`}></span>
           <span className="section-title">{title}</span>
           <span className="section-count">({deaths.total})</span>
+          <button
+            className="btn btn-xs btn-outline btn-success ml-2"
+            onClick={onExport}
+            disabled={exporting}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+            {exporting ? "Exporting..." : "Download Excel"}
+          </button>
         </div>
       </div>
       <div className="overflow-x-auto">
