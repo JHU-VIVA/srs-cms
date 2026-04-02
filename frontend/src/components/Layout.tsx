@@ -8,7 +8,7 @@ export default function Layout() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-mesh">
+      <div className="flex items-center justify-center min-h-screen bg-viva-page">
         <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
@@ -19,7 +19,7 @@ export default function Layout() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-mesh">
+    <div className="flex flex-col min-h-screen bg-viva-page">
       <header className="sticky top-0 z-50 animate-slide-down">
         <Header />
       </header>

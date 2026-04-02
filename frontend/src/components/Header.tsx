@@ -9,7 +9,7 @@ export default function Header() {
       <div className="navbar-start">
         {/* Mobile hamburger */}
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -26,13 +26,14 @@ export default function Header() {
             </svg>
           </div>
           {user && (
-            <ul className="menu menu-sm dropdown-content glass-card z-[1] mt-3 w-52 p-2">
+            <ul className="menu menu-sm dropdown-content bg-viva-dark border border-viva-slate/30 z-[1] mt-3 w-52 p-2 rounded-xl shadow-xl">
               <MenuItems />
             </ul>
           )}
         </div>
-        <Link to="/" className="btn btn-ghost text-xl font-bold text-slate-800">
-          SRS-CMS
+        <Link to="/" className="flex items-center gap-2 btn btn-ghost hover:bg-white/10">
+          <img src="/viva-logo-white.png" alt="VIVA" className="h-6" />
+          <span className="text-white/60 text-sm font-light hidden sm:inline">SRS-CMS</span>
         </Link>
       </div>
 
@@ -53,28 +54,28 @@ export default function Header() {
             role="button"
             className="btn btn-ghost btn-circle avatar"
           >
-            <div className="w-10 rounded-full bg-primary/10 ring ring-primary/30 ring-offset-2 ring-offset-white/50 flex items-center justify-center">
-              <span className="text-lg font-semibold text-primary">
+            <div className="w-10 rounded-full bg-white/10 ring ring-viva-accent/40 ring-offset-2 ring-offset-viva-navy flex items-center justify-center">
+              <span className="text-lg font-semibold text-white">
                 {user ? user.username[0].toUpperCase() : "?"}
               </span>
             </div>
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content glass-card z-[1] mt-3 w-52 p-2"
+            className="menu menu-sm dropdown-content bg-viva-dark border border-viva-slate/30 z-[1] mt-3 w-52 p-2 rounded-xl shadow-xl"
           >
             {user ? (
               <>
                 <li className="menu-title">
-                  <span>{user.username}</span>
+                  <span className="text-viva-light">{user.username}</span>
                 </li>
                 <li>
-                  <button onClick={logout}>Logout</button>
+                  <button onClick={logout} className="text-viva-light hover:bg-white/10">Logout</button>
                 </li>
               </>
             ) : (
               <li>
-                <Link to="/login">Login</Link>
+                <Link to="/login" className="text-viva-light hover:bg-white/10">Login</Link>
               </li>
             )}
           </ul>
@@ -88,7 +89,7 @@ function MenuItems() {
   return (
     <>
       <li>
-        <Link to="/dashboard" className="btn btn-ghost justify-between">
+        <Link to="/dashboard" className="btn btn-ghost text-white/90 hover:text-white hover:bg-white/10 justify-between">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
@@ -106,7 +107,7 @@ function MenuItems() {
         </Link>
       </li>
       <li>
-        <Link to="/deaths" className="btn btn-ghost justify-between">
+        <Link to="/deaths" className="btn btn-ghost text-white/90 hover:text-white hover:bg-white/10 justify-between">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
@@ -124,7 +125,7 @@ function MenuItems() {
         </Link>
       </li>
       <li>
-        <Link to="/pregnancy-outcomes" className="btn btn-ghost justify-between">
+        <Link to="/pregnancy-outcomes" className="btn btn-ghost text-white/90 hover:text-white hover:bg-white/10 justify-between">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
@@ -142,7 +143,7 @@ function MenuItems() {
         </Link>
       </li>
       <li>
-        <Link to="/households" className="btn btn-ghost justify-between">
+        <Link to="/households" className="btn btn-ghost text-white/90 hover:text-white hover:bg-white/10 justify-between">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"

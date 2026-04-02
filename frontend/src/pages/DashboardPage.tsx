@@ -16,7 +16,7 @@ const METRICS: Record<string, string> = {
   household_members_total: "Household Members",
   pregnancy_outcomes_total: "Pregnancy Outcomes",
   deaths_total: "Deaths",
-  babies_total: "Babies",
+  babies_total: "Live Births",
   verbal_autopsies_total: "Verbal Autopsies",
 };
 
@@ -90,7 +90,7 @@ export default function DashboardPage() {
                         "Count",
                       ]}
                     />
-                    <Bar dataKey="count" fill="#10b981" radius={[0, 4, 4, 0]} />
+                    <Bar dataKey="count" fill="#4a90d9" radius={[0, 4, 4, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               )}
