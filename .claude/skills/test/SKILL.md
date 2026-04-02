@@ -129,9 +129,10 @@ Follow this user flow, using `browser_snapshot` at each page to verify:
 - Charts render (canvas/SVG elements)
 
 **Deaths list** (`/deaths`) — navigate via header link:
-- Section headers for death categories
+- Section headers for death categories (New, VA Scheduled, Completed)
 - Filter controls visible (province, date range)
 - Table with data rows (name, date, location, status columns)
+- Excel download button visible in each section header
 
 **Death detail** (`/deaths/:id`) — click first record in the table:
 - Detail page loads with death information
