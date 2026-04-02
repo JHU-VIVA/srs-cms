@@ -49,3 +49,15 @@ export function getStaff(provinceId?: number, staffType?: string) {
   const str = sp.toString();
   return get<Staff[]>(`/staff${str ? `?${str}` : ""}`);
 }
+
+export async function exportDeaths(params: Pick<DeathsParams, "status" | "province_id" | "start_date" | "end_date" | "q">) {
+  const sp = new URLSearchParams();
+  Object.entries(params).forEach(([k, v]) => {
+    if (v !== undefined && v !== "") sp.set(k, String(v));
+  });
+  const query = sp.toString();
+  const url = `/api/deaths/export${query ? `?${query}` : ""}`;
+  const res = await fetch(url, { credentials: "same-origin" });
+  if (!res.ok) throw new Error("Export failed");
+  return res.blob();
+}
