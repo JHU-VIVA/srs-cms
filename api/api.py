@@ -326,17 +326,7 @@ def list_staff(request, province_id: Optional[int] = None, staff_type: Optional[
 # Death endpoints
 # ──────────────────────────────────────────────
 
-@api.get("/deaths", auth=django_auth, response=PaginatedDeathsOut)
-def list_deaths(
-    request,
-    status: Optional[int] = None,
-    province_id: Optional[int] = None,
-    start_date: Optional[str] = None,
-    end_date: Optional[str] = None,
-    q: Optional[str] = None,
-    page: int = 1,
-    page_size: int = 10,
-):
+def _filter_deaths(status=None, province_id=None, start_date=None, end_date=None, q=None):
     qs = Death.objects.select_related('event', 'event__cluster', 'event__area', 'event__event_staff', 'va_staff')
 
     if status is not None:
@@ -352,7 +342,6 @@ def list_deaths(
     elif end_date:
         qs = qs.filter(deceased_dod__lte=parse_date(end_date))
 
-    # Partial match search on death code or work area/district
     if q and q.strip():
         query = q.strip()
         qs = qs.filter(
@@ -360,7 +349,21 @@ def list_deaths(
             Q(event__area__code__icontains=query)
         )
 
-    qs = qs.order_by('-id')
+    return qs.order_by('-id')
+
+
+@api.get("/deaths", auth=django_auth, response=PaginatedDeathsOut)
+def list_deaths(
+    request,
+    status: Optional[int] = None,
+    province_id: Optional[int] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    q: Optional[str] = None,
+    page: int = 1,
+    page_size: int = 10,
+):
+    qs = _filter_deaths(status, province_id, start_date, end_date, q)
 
     paginator = Paginator(qs, page_size)
     try:
