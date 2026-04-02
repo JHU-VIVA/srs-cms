@@ -380,6 +380,78 @@ def list_deaths(
     )
 
 
+@api.get("/deaths/export", auth=django_auth)
+def export_deaths(
+    request,
+    status: Optional[int] = None,
+    province_id: Optional[int] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    q: Optional[str] = None,
+):
+    qs = _filter_deaths(status, province_id, start_date, end_date, q)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    is_completed = status == Death.DeathStatus.VA_COMPLETED
+
+    if is_completed:
+        ws.title = "Completed Deaths"
+        ws.append(["Death ID", "Work Area/District", "Cluster", "Worker", "Deceased Name",
+                    "Date of Death", "Household ID", "VA Interviewer", "VA Date", "VA Submitted"])
+    else:
+        ws.title = "Deaths"
+        ws.append(["Death ID", "Work Area/District", "Cluster", "Worker", "Deceased Name",
+                    "Date of Death", "Household ID", "HH Head Name", "Respondent",
+                    "VA Date Requested", "Submission Date"])
+
+    for death in qs:
+        event = death.event
+        event_staff = event.event_staff
+        va_staff = death.va_staff
+        if is_completed:
+            ws.append([
+                death.death_code or "",
+                event.area_code or "",
+                event.cluster_code or "",
+                event_staff.full_name if event_staff else "",
+                death.deceased_name or "",
+                str(death.deceased_dod) if death.deceased_dod else "",
+                event.household_code or "",
+                va_staff.full_name if va_staff else "",
+                str(death.va_scheduled_date) if death.va_scheduled_date else "",
+                str(death.va_completed_date) if death.va_completed_date else "",
+            ])
+        else:
+            ws.append([
+                death.death_code or "",
+                event.area_code or "",
+                event.cluster_code or "",
+                event_staff.full_name if event_staff else "",
+                death.deceased_name or "",
+                str(death.deceased_dod) if death.deceased_dod else "",
+                event.household_code or "",
+                event.household_head_name or "",
+                event.respondent_name or "",
+                str(death.va_proposed_date) if death.va_proposed_date else "",
+                str(event.submission_date) if event.submission_date else "",
+            ])
+
+    buf = BytesIO()
+    wb.save(buf)
+    buf.seek(0)
+
+    status_label = {0: "new", 1: "scheduled", 2: "completed"}.get(status, "all")
+    today = date.today().strftime("%Y-%m-%d")
+    response = HttpResponse(
+        buf.getvalue(),
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    response["Content-Disposition"] = f'attachment; filename="deaths_{status_label}_{today}.xlsx"'
+    return response
+
+
 @api.get("/deaths/{death_id}", auth=django_auth, response=DeathOut)
 def get_death(request, death_id: int):
     death = Death.objects.select_related(
