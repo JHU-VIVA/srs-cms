@@ -54,7 +54,7 @@ export default function Header() {
             role="button"
             className="btn btn-ghost btn-circle avatar"
           >
-            <div className="w-10 rounded-full bg-white/10 ring ring-viva-accent/40 ring-offset-2 ring-offset-viva-navy flex items-center justify-center">
+            <div className="w-10 rounded-full bg-white/10 ring ring-viva-light/40 ring-offset-2 ring-offset-viva-slate flex items-center justify-center">
               <span className="text-lg font-semibold text-white">
                 {user ? user.username[0].toUpperCase() : "?"}
               </span>

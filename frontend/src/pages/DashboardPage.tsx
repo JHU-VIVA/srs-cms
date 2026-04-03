@@ -90,7 +90,7 @@ export default function DashboardPage() {
                         "Count",
                       ]}
                     />
-                    <Bar dataKey="count" fill="#4a90d9" radius={[0, 4, 4, 0]} />
+                    <Bar dataKey="count" fill="#424c66" radius={[0, 4, 4, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               )}

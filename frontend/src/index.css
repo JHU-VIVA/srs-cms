@@ -4,7 +4,7 @@
 
 @layer base {
   .bg-viva-page {
-    background-color: #f0f4f8;
+    background-color: #F0EBE5;
     background-image: url('/viva-pattern.png');
     background-size: 600px;
     background-repeat: repeat;
@@ -14,7 +14,7 @@
 }
 
 @layer components {
-  /* Glass morphism — tuned for light page with pattern */
+  /* Glass morphism — tuned for cream page with pattern */
   .glass-card {
     @apply bg-white/80 backdrop-blur-md border border-slate-200/60 rounded-xl shadow-lg;
   }
@@ -22,10 +22,10 @@
     @apply bg-white/90 backdrop-blur-md border border-slate-200/60 rounded-xl shadow-lg;
   }
   .glass-nav {
-    @apply bg-viva-navy text-white shadow-md;
+    @apply bg-viva-slate text-white shadow-md;
   }
   .glass-footer {
-    @apply bg-viva-navy text-viva-light border-t border-viva-slate/30;
+    @apply bg-viva-slate text-viva-light border-t border-white/10;
   }
 
   /* Form components */
@@ -41,7 +41,7 @@
   .form-input {
     @apply w-full px-4 py-2 leading-tight input input-bordered
            bg-white/80 backdrop-blur-sm border-slate-300
-           focus:border-viva-accent focus:ring-2 focus:ring-viva-accent/30
+           focus:border-viva-dark focus:ring-2 focus:ring-viva-dark/30
            transition-all duration-200;
   }
   .form-error {
@@ -67,13 +67,13 @@
     @apply table table-xs;
   }
   .table-enhanced thead tr {
-    @apply bg-viva-navy/5 border-b-2 border-slate-200;
+    @apply bg-viva-slate/5 border-b-2 border-slate-200;
   }
   .table-enhanced thead th {
     @apply text-wrap text-slate-600 font-semibold text-xs uppercase tracking-wider py-3;
   }
   .table-enhanced tbody tr {
-    @apply transition-colors duration-150 hover:bg-viva-accent/10 border-b border-slate-100;
+    @apply transition-colors duration-150 hover:bg-viva-dark/10 border-b border-slate-100;
   }
   .table-enhanced tbody td {
     @apply py-2.5;
@@ -84,7 +84,7 @@
     @apply glass-card p-0 overflow-hidden mb-6;
   }
   .section-header {
-    @apply flex items-center justify-between px-5 py-3 bg-viva-navy/5 border-b border-slate-200/60;
+    @apply flex items-center justify-between px-5 py-3 bg-viva-slate/5 border-b border-slate-200/60;
   }
   .section-title {
     @apply font-bold text-slate-800;

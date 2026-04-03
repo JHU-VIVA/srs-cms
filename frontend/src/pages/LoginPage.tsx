@@ -21,7 +21,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-viva-navy">
+    <div className="min-h-screen flex flex-col bg-viva-slate">
       {/* Globe background */}
       <div
         className="absolute inset-0 opacity-30"
@@ -64,7 +64,7 @@ export default function LoginPage() {
                 <label className="block text-viva-light/80 text-sm font-medium mb-1">Username</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 focus:border-viva-accent focus:ring-2 focus:ring-viva-accent/30 transition-all duration-200"
+                  className="w-full px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 focus:border-viva-light focus:ring-2 focus:ring-viva-light/30 transition-all duration-200"
                   required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -75,14 +75,14 @@ export default function LoginPage() {
                 <label className="block text-viva-light/80 text-sm font-medium mb-1">Password</label>
                 <input
                   type="password"
-                  className="w-full px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 focus:border-viva-accent focus:ring-2 focus:ring-viva-accent/30 transition-all duration-200"
+                  className="w-full px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 focus:border-viva-light focus:ring-2 focus:ring-viva-light/30 transition-all duration-200"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 
-              <button type="submit" className="btn w-full bg-viva-accent hover:bg-viva-accent/80 text-white border-none">
+              <button type="submit" className="btn w-full bg-viva-dark hover:bg-viva-dark/80 text-white border-none">
                 Sign In
               </button>
             </form>

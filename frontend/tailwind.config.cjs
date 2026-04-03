@@ -5,10 +5,9 @@ module.exports = {
     extend: {
       colors: {
         viva: {
-          navy: '#0a1628',
-          dark: '#0f1d32',
-          slate: '#6b7ea0',
-          accent: '#4a90d9',
+          slate: '#525F80',
+          dark: '#424c66',
+          cream: '#F0EBE5',
           light: '#c8d6e5',
         },
       },
@@ -38,14 +37,14 @@ module.exports = {
     themes: [
       {
         viva: {
-          "primary": "#4a90d9",
-          "secondary": "#6b7ea0",
-          "accent": "#c8d6e5",
-          "neutral": "#0f1d32",
-          "base-100": "#f0f4f8",
-          "base-200": "#e2e8f0",
-          "base-300": "#cbd5e1",
-          "info": "#4a90d9",
+          "primary": "#424c66",
+          "secondary": "#525F80",
+          "accent": "#525F80",
+          "neutral": "#424c66",
+          "base-100": "#F0EBE5",
+          "base-200": "#e6e0d8",
+          "base-300": "#d9d2c9",
+          "info": "#525F80",
           "success": "#22c55e",
           "warning": "#f59e0b",
           "error": "#ef4444",
