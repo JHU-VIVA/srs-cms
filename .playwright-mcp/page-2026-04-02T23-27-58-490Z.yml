@@ -1,0 +1,86 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e23]:
+    - banner [ref=e24]:
+      - generic [ref=e25]:
+        - link "VIVA SRS-CMS" [ref=e27] [cursor=pointer]:
+          - /url: /
+          - img "VIVA" [ref=e28]
+          - generic [ref=e29]: SRS-CMS
+        - list [ref=e31]:
+          - listitem [ref=e32]:
+            - link "Dashboard" [ref=e33] [cursor=pointer]:
+              - /url: /dashboard
+              - img [ref=e34]
+              - text: Dashboard
+          - listitem [ref=e36]:
+            - link "Death Management" [ref=e37] [cursor=pointer]:
+              - /url: /deaths
+              - img [ref=e38]
+              - text: Death Management
+          - listitem [ref=e40]:
+            - link "Pregnancy Outcomes" [ref=e41] [cursor=pointer]:
+              - /url: /pregnancy-outcomes
+              - img [ref=e42]
+              - text: Pregnancy Outcomes
+          - listitem [ref=e44]:
+            - link "Households" [ref=e45] [cursor=pointer]:
+              - /url: /households
+              - img [ref=e46]
+              - text: Households
+        - button "F" [ref=e50] [cursor=pointer]:
+          - generic [ref=e51]: F
+    - main [ref=e52]:
+      - generic [ref=e54]:
+        - heading "Dashboard" [level=1] [ref=e55]
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - heading "Households" [level=2] [ref=e59]
+              - generic [ref=e60]: "3"
+            - application [ref=e63]:
+              - generic [ref=e82]:
+                - generic [ref=e84]: WESTERN
+                - generic [ref=e86]: LUAPULA
+                - generic [ref=e88]: EASTERN
+          - generic [ref=e89]:
+            - generic [ref=e90]:
+              - heading "Household Members" [level=2] [ref=e91]
+              - generic [ref=e92]: "11"
+            - application [ref=e95]:
+              - generic [ref=e114]:
+                - generic [ref=e116]: LUAPULA
+                - generic [ref=e118]: EASTERN
+                - generic [ref=e120]: WESTERN
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - heading "Pregnancy Outcomes" [level=2] [ref=e123]
+              - generic [ref=e124]: "3"
+            - application [ref=e127]:
+              - generic [ref=e143]:
+                - generic [ref=e145]: CENTRAL
+                - generic [ref=e147]: SOUTHERN
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - heading "Deaths" [level=2] [ref=e150]
+              - generic [ref=e151]: "5"
+            - application [ref=e154]:
+              - generic [ref=e170]:
+                - generic [ref=e172]: CENTRAL
+                - generic [ref=e174]: SOUTHERN
+          - generic [ref=e175]:
+            - generic [ref=e176]:
+              - heading "Live Births" [level=2] [ref=e177]
+              - generic [ref=e178]: "2"
+            - application [ref=e181]:
+              - generic [ref=e194]: CENTRAL
+          - generic [ref=e195]:
+            - generic [ref=e196]:
+              - heading "Verbal Autopsies" [level=2] [ref=e197]
+              - generic [ref=e198]: "3"
+            - application [ref=e201]:
+              - generic [ref=e214]: CENTRAL
+    - contentinfo [ref=e215]:
+      - complementary [ref=e216]:
+        - img "VIVA" [ref=e217]
+        - paragraph [ref=e218]: SRS-CMS
+  - generic [ref=e219]: CENTRAL

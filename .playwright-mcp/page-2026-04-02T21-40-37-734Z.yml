@@ -1,0 +1,524 @@
+- generic [ref=e2]:
+  - banner:
+    - generic [ref=e3]:
+      - link "Skip to Content" [ref=e4] [cursor=pointer]:
+        - /url: "#page"
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - link "VIVA" [ref=e11] [cursor=pointer]:
+            - /url: /
+            - img "VIVA" [ref=e12]
+          - navigation [ref=e15]:
+            - link "About Viva" [ref=e17] [cursor=pointer]:
+              - /url: /about-viva
+            - link "Process" [ref=e19] [cursor=pointer]:
+              - /url: /process
+            - link "Blog" [ref=e21] [cursor=pointer]:
+              - /url: /blog
+            - link "Publications" [ref=e23] [cursor=pointer]:
+              - /url: /publications
+            - link "Contact" [ref=e25] [cursor=pointer]:
+              - /url: /contact
+        - link "Get The Tools" [ref=e28] [cursor=pointer]:
+          - /url: /get-the-tools
+  - main [ref=e29]:
+    - article [ref=e30]:
+      - heading "Publications" [level=1] [ref=e42]
+      - generic [ref=e48]:
+        - generic [ref=e53]:
+          - img
+        - heading "Featured Publications" [level=2] [ref=e62]
+        - generic [ref=e67]:
+          - paragraph [ref=e68]:
+            - text: Boerma, T. (2023).
+            - 'link "Addressing the Gaps in Mortality Data: A Case for National Mortality Surveillance." [ref=e69] [cursor=pointer]':
+              - /url: https://doi.org/10.4269/AJTMH.23-0042
+            - emphasis [ref=e70]: The American Journal of Tropical Medicine and Hygiene
+            - text: ","
+            - emphasis [ref=e71]: "108"
+            - text: (5_Suppl), 1–2.
+          - paragraph [ref=e72]:
+            - text: Macicame, I et al. (2023).
+            - 'link "Countrywide Mortality Surveillance for Action in Mozambique: Results from a National Sample-Based Vital Statistics System for Mortality and Cause of Deat" [ref=e73] [cursor=pointer]':
+              - /url: https://www.ajtmh.org/view/journals/tpmd/108/5_Suppl/article-p5.xml
+            - text: h.
+            - emphasis [ref=e74]: The American Journal of Tropical Medicine and Hygiene
+            - text: ","
+            - emphasis [ref=e75]: "108"
+            - text: (5_Suppl), 5-16
+          - paragraph [ref=e76]:
+            - text: Gudo, E. S. (2023).
+            - 'link "Mozambique Sample Vital Statistics System: Filling the Gaps for Mortality Data." [ref=e77] [cursor=pointer]':
+              - /url: https://doi.org/10.4269/AJTMH.23-0094
+            - emphasis [ref=e78]: The American Journal of Tropical Medicine and Hygiene
+            - text: ","
+            - emphasis [ref=e79]: "108"
+            - text: (5_Suppl), 3–4.
+          - paragraph [ref=e80]:
+            - text: Carshon-Marsh, R., Aimone, A., Ansumana, R., Swaray, I. B., Assalif, A., Musa, A., Meh, C., Smart, F., Hang Fu, S., Newcombe, L., Kamadod, R., Saikia, N., Gelband, H., Jambai, A., & Jha, P. (2022).
+            - 'link "Child, maternal, and adult mortality in Sierra Leone: nationally representative mortality survey 2018-20." [ref=e81] [cursor=pointer]':
+              - /url: https://doi.org/10.1016/S2214-109X(21)00459-9
+            - emphasis [ref=e82]: The Lancet. Global Health
+            - text: ","
+            - emphasis [ref=e83]: "10"
+            - text: (1), e114–e123.
+      - generic [ref=e89]:
+        - heading "Other Publications" [level=2] [ref=e95]
+        - generic [ref=e100]:
+          - paragraph [ref=e101]: "2023"
+          - paragraph [ref=e102]:
+            - text: Fiksel, J., Gilbert, B., Wilson, E., Kalter, H., Kante, A., Akum, A., Blau, D., Bassat, Q., Macicame, I., Gudo, E. S., Black, R., Zeger, S., Amouzou, A., & Datta, A. (2023).
+            - link "Correcting for Verbal Autopsy Misclassification Bias in Cause-Specific Mortality Estimates." [ref=e103] [cursor=pointer]:
+              - /url: https://doi.org/10.4269/AJTMH.22-0318
+            - generic [ref=e104]:
+              - emphasis [ref=e105]: The American Journal of Tropical Medicine and Hygiene
+              - text: ","
+              - emphasis [ref=e106]: "108"
+              - text: (5_Suppl), 66–77.
+          - paragraph [ref=e107]:
+            - text: Gilbert, B., Fiksel, J., Wilson, E., Kalter, H., Kante, A., Akum, A., Blau, D., Bassat, Q., Macicame, I., Gudo, E. S., Black, R., Zeger, S., Amouzou, A., & Datta, A. (2023).
+            - link "Multi-Cause Calibration of Verbal Autopsy–Based Cause-Specific Mortality Estimates of Children and Neonates in Mozambique." [ref=e108] [cursor=pointer]:
+              - /url: https://doi.org/10.4269/AJTMH.22-0319
+            - generic [ref=e109]:
+              - emphasis [ref=e110]: The American Journal of Tropical Medicine and Hygiene
+              - text: ","
+              - emphasis [ref=e111]: "108"
+              - text: (5_Suppl), 78–89.
+          - paragraph [ref=e112]:
+            - text: Gudo, E. S. (2023).
+            - 'link "Mozambique Sample Vital Statistics System: Filling the Gaps for Mortality Data." [ref=e113] [cursor=pointer]':
+              - /url: https://doi.org/10.4269/AJTMH.23-0094
+            - generic [ref=e114]:
+              - emphasis [ref=e115]: The American Journal of Tropical Medicine and Hygiene
+              - text: ","
+              - emphasis [ref=e116]: "108"
+              - text: (5_Suppl), 3–4.
+          - paragraph [ref=e117]:
+            - text: Jiwani, S. S., Mavie, V. A., Williams, E., Kante, A. M., & Amouzou, A. (2023).
+            - 'link "Implementing the Countrywide Mortality Surveillance in Action in Mozambique: How Much Did It Cost?" [ref=e118] [cursor=pointer]':
+              - /url: https://doi.org/10.4269/AJTMH.22-0438
+            - generic [ref=e119]:
+              - emphasis [ref=e120]: The American Journal of Tropical Medicine and Hygiene
+              - text: ","
+              - emphasis [ref=e121]: "108"
+              - text: (5_Suppl), 40–46.
+          - paragraph [ref=e122]:
+            - text: Kante, A. M., Mulungo, A., Ibraimo, M., Akum, A., Titus, N., Adriano, A., Van Dyk, F., Macicame, I., Black, R. E., & Amouzou, A. (2023).
+            - link "Completeness and Factors Affecting Community Workers’ Reporting of Births and Deaths in the Countrywide Mortality Surveillance for Action in Mozambique." [ref=e123] [cursor=pointer]:
+              - /url: https://doi.org/10.4269/AJTMH.22-0537
+            - generic [ref=e124]:
+              - emphasis [ref=e125]: The American Journal of Tropical Medicine and Hygiene
+              - text: ","
+              - emphasis [ref=e126]: "108"
+              - text: (5_Suppl), 29–39.
+          - paragraph [ref=e127]:
+            - text: Macicame, I., Kante, A. M., Wilson, E., Gilbert, B., Koffi, A., Nhachungue, S., Monjane, C., Duce, P., Adriano, A., Chicumbe, S., Jani, I., Kalter, H. D., Datta, A., Zeger, S., Black, R. E., Gudo, E. S., & Amouzou, A. (2023).
+            - 'link "Countrywide Mortality Surveillance for Action in Mozambique: Results from a National Sample-Based Vital Statistics System for Mortality and Cause of Death." [ref=e128] [cursor=pointer]':
+              - /url: https://doi.org/10.4269/AJTMH.22-0367
+            - generic [ref=e129]:
+              - emphasis [ref=e130]: The American Journal of Tropical Medicine and Hygiene
+              - text: ","
+              - emphasis [ref=e131]: "108"
+              - text: (5_Suppl), 5–16.
+          - paragraph [ref=e132]:
+            - text: Magaço, A., Alonso, Y., Maixenchs, M., Ambrosio, C., Sitoe, A., Vitorino, P., Blau, D., Garel, M., Breiman, R., Amouzou, A., Bassat, Q., Mandomando, I., Blevins, J., & Munguambe, K. (2023).
+            - link "A Qualitative Assessment of Community Acceptability and Its Determinants in the Implementation of Minimally Invasive Tissue Sampling in Children in Quelimane City, Mozambique." [ref=e133] [cursor=pointer]:
+              - /url: https://doi.org/10.4269/AJTMH.22-0343
+            - generic [ref=e134]:
+              - emphasis [ref=e135]: The American Journal of Tropical Medicine and Hygiene
+              - text: ","
+              - emphasis [ref=e136]: "108"
+              - text: (5_Suppl), 56–65.
+          - paragraph [ref=e137]:
+            - text: Rahman, M. H., Macicame, I., Wilson, E., Nhachungue, S., & Amouzou, A. (2023).
+            - link "Verbal and Social Autopsy of Adult Deaths and Adult Care-Seeking Pattern in Mozambique, 2019–2020." [ref=e138] [cursor=pointer]:
+              - /url: https://doi.org/10.4269/AJTMH.22-0548
+            - generic [ref=e139]:
+              - emphasis [ref=e140]: The American Journal of Tropical Medicine and Hygiene
+              - text: ","
+              - emphasis [ref=e141]: "108"
+              - text: (5_Suppl), 17–28.
+          - paragraph [ref=e142]:
+            - text: Rodríguez, D. C., Macicame, I., Adriano, A., Chicumbe, S., Duce, P., Kante, A., Mavie, V. A., Mbalane, E., Nhachungue, S., Titus, N., Van Dyk, F., & Amouzou, A. (2023). F
+            - 'link "rom External to Local: Opportunities and Lessons Learned from Transitioning COMSA-Mozambique." [ref=e143] [cursor=pointer]':
+              - /url: https://doi.org/10.4269/AJTMH.22-0284
+            - generic [ref=e144]:
+              - emphasis [ref=e145]: The American Journal of Tropical Medicine and Hygiene
+              - text: ","
+              - emphasis [ref=e146]: "108"
+              - text: (5_Suppl), 47–55.
+          - paragraph [ref=e147]:
+            - strong [ref=e149]: "2022"
+          - paragraph [ref=e150]:
+            - generic [ref=e151]:
+              - text: "Carshon-Marsh, R., Aimone, A., Ansumana, R., Swaray, I. B., Assalif, A., Musa, A., Meh, C., Smart, F., Hang Fu, S., Newcombe, L., Kamadod, R., Saikia, N., Gelband, H., Jambai, A., & Jha, P. (2022). Child, maternal, and adult mortality in Sierra Leone: nationally representative mortality survey 2018-20."
+              - emphasis [ref=e152]: The Lancet. Global Health
+              - text: ","
+              - emphasis [ref=e153]: "10"
+              - text: (1), e114–e123. https://doi.org/10.1016/S2214-109X(21)00459-9
+          - paragraph [ref=e154]
+          - paragraph [ref=e155]:
+            - strong [ref=e157]: "2021"
+          - paragraph [ref=e158]:
+            - generic [ref=e159]:
+              - text: Adedini, S. A., Thaele, D., Sello, M., Mutevedzi, P., Hywinya, C., Ngwenya, N., Myburgh, N., & Madhi, S. A. (2021). Approaches, achievements, challenges, and lessons learned in setting up an urban-based Health and Demographic Surveillance System in South Africa.
+              - emphasis [ref=e160]: Global Health Action
+              - text: ","
+              - emphasis [ref=e161]: "14"
+              - text: (1), 1874138.
+            - link "https://doi.org/10.1080/16549716.2021.1874138" [ref=e162] [cursor=pointer]:
+              - /url: https://doi.org/10.1080/16549716.2021.1874138
+              - generic [ref=e163]: https://doi.org/10.1080/16549716.2021.1874138
+          - paragraph [ref=e164]:
+            - text: Basera, T. J., Schmitz, K., Price, J., Willcox, M., Bosire, E. N., Ajuwon, A., Mbule, M., Ronan, A., Burtt, F., Scheepers, E., & Igumbor, J. (2021).
+            - 'link "Community surveillance and response to maternal and child deaths in low- And middle income countries: A Scoping Review." [ref=e165] [cursor=pointer]':
+              - /url: https://doi.org/10.1371/journal.pone.0248143
+            - generic [ref=e166]:
+              - text: In
+              - emphasis [ref=e167]: PLoS ONE
+              - text: (Vol. 16, Issue 3 March). Public Library of Science. https://doi.org/10.1371/journal.pone.0248143
+          - paragraph [ref=e168]
+          - paragraph [ref=e169]:
+            - strong [ref=e171]: "2020"
+          - paragraph [ref=e172]:
+            - generic [ref=e173]:
+              - text: "Adair, T., Rajasekhar, M., Bo, K. S., Hart, J., Kwa, V., Mukut, M. A. A., Reeve, M., Richards, N., Ronderos-Torres, M., De Savigny, D., Muñoz, D. C., & Lopez, A. D. (2020). Where there is no hospital: Improving the notification of community deaths."
+              - emphasis [ref=e174]: BMC Medicine
+              - text: ","
+              - emphasis [ref=e175]: "18"
+              - text: (1).
+            - link "https://doi.org/10.1186/s12916-020-01524-x" [ref=e176] [cursor=pointer]:
+              - /url: https://doi.org/10.1186/s12916-020-01524-x
+              - generic [ref=e177]: https://doi.org/10.1186/s12916-020-01524-x
+          - paragraph [ref=e178]
+          - paragraph [ref=e179]:
+            - strong [ref=e181]: "2019"
+          - paragraph [ref=e182]:
+            - generic [ref=e183]:
+              - text: "Hutain, J., Perry, H. B., Koffi, A. K., Christensen, M., O’Connor, E. C., Jabbi, S. M. B. B., Samba, T. T., & Kaiser, R. (2019). Engaging communities in collecting and using results from verbal autopsies for child deaths: An example from urban slums in Freetown, Sierra Leone."
+              - emphasis [ref=e184]: Journal of Global Health
+              - text: ","
+              - emphasis [ref=e185]: "9"
+              - text: (1).
+            - link "https://doi.org/10.7189/jogh.09.010419" [ref=e186] [cursor=pointer]:
+              - /url: https://doi.org/10.7189/jogh.09.010419
+              - generic [ref=e187]: https://doi.org/10.7189/jogh.09.010419
+          - paragraph [ref=e188]:
+            - generic [ref=e189]:
+              - text: Mills, S., Lee, J. K., & Rassekh, B. M. (2019). A multisectoral institutional arrangements approach to integrating civil registration, vital statistics, and identity management systems.
+              - emphasis [ref=e190]: Journal of Health, Population and Nutrition
+              - text: ","
+              - emphasis [ref=e191]: "38"
+              - text: (Suppl 1).
+            - link "https://doi.org/10.1186/s41043-019-0179-z" [ref=e192] [cursor=pointer]:
+              - /url: https://doi.org/10.1186/s41043-019-0179-z
+              - generic [ref=e193]: https://doi.org/10.1186/s41043-019-0179-z
+          - paragraph [ref=e194]:
+            - generic [ref=e195]:
+              - text: "Nabukalu, D., Ntaro, M., Seviiri, M., Reyes, R., Wiens, M., Sundararajan, R., Mulogo, E., & Boyce, R. M. (2019). Community health workers trained to conduct verbal autopsies provide better mortality measures than existing surveillance: Results from a cross-sectional study in rural western Uganda."
+              - emphasis [ref=e196]: PLoS ONE
+              - text: ","
+              - emphasis [ref=e197]: "14"
+              - text: (2). https://doi.org/10.1371/journal.pone.0211482
+          - paragraph [ref=e198]:
+            - generic [ref=e199]:
+              - text: Nichols, E. K., Ragunanthan, N. W., Ragunanthan, B., Gebrehiwet, H., & Kamara, K. (2019). A systematic review of vital events tracking by community health agents. In
+              - emphasis [ref=e200]: Global Health Action
+              - text: (Vol. 12, Issue 1). Taylor and Francis Ltd. https://doi.org/10.1080/16549716.2019.1597452
+          - paragraph [ref=e201]:
+            - generic [ref=e202]:
+              - text: "Singh, Y., Jackson, D., Bhardwaj, S., Titus, N., & Goga, A. (2019). National surveillance using mobile systems for health monitoring: complexity, functionality and feasibility."
+              - emphasis [ref=e203]: BMC Infectious Diseases
+              - text: ","
+              - emphasis [ref=e204]: "19"
+              - text: (Suppl 1), 786. https://doi.org/10.1186/s12879-019-4338-z
+          - paragraph [ref=e205]
+          - paragraph [ref=e206]:
+            - strong [ref=e208]: "2018"
+          - paragraph [ref=e209]:
+            - generic [ref=e210]:
+              - text: "Helleringer, S., Arhinful, D., Abuaku, B., Humes, M., Wilson, E., Marsh, A., Clermont, A., Black, R. E., Bryce, J., & Amouzou, A. (2018a). Using community-based reporting of vital events to monitor child mortality: Lessons from rural Ghana."
+              - emphasis [ref=e211]: PLoS ONE
+              - text: ","
+              - emphasis [ref=e212]: "13"
+              - text: (1).
+            - link "https://doi.org/10.1371/journal.pone.0192034" [ref=e213] [cursor=pointer]:
+              - /url: https://doi.org/10.1371/journal.pone.0192034
+              - generic [ref=e214]: https://doi.org/10.1371/journal.pone.0192034
+          - paragraph [ref=e215]:
+            - generic [ref=e216]:
+              - text: "Usman, Y., Iriawan, R. W., Rosita, T., Lusiana, M., Kosen, S., Kelly, M., Forsyth, S., & Rao, C. (2018). Indonesia’s sample registration system in 2018: A work in progress."
+              - emphasis [ref=e217]: Journal of Population and Social Studies
+              - text: ","
+              - emphasis [ref=e218]: "27"
+              - text: (1), 39–52. https://doi.org/10.25133/JPSSV27N1.003
+          - paragraph [ref=e219]
+          - paragraph [ref=e220]:
+            - strong [ref=e222]: "2017"
+          - paragraph [ref=e223]:
+            - generic [ref=e224]:
+              - text: "Davey, G., & Deribe, K. (2017). Precision public health: mapping child mortality in Africa. In"
+              - emphasis [ref=e225]: The Lancet
+              - text: (Vol. 390, Issue 10108, pp. 2126–2128). Lancet Publishing Group.
+            - link "https://doi.org/10.1016/S0140-6736(17)32280-8" [ref=e226] [cursor=pointer]:
+              - /url: https://doi.org/10.1016/S0140-6736(17)32280-8
+              - generic [ref=e227]: https://doi.org/10.1016/S0140-6736(17)32280-8
+          - paragraph [ref=e228]:
+            - generic [ref=e229]:
+              - text: "Gomes, M., Begum, R., Sati, P., Dikshit, R., Gupta, P. C., Kumar, R., Sheth, J., Habib, A., & Jha, P. (2017). Nationwide mortality studies to quantify causes of death: Relevant lessons from India’s million death study."
+              - emphasis [ref=e230]: Health Affairs
+              - text: ","
+              - emphasis [ref=e231]: "36"
+              - text: (11), 1887–1895.
+            - link "https://doi.org/10.1377/hlthaff.2017.0635" [ref=e232] [cursor=pointer]:
+              - /url: https://doi.org/10.1377/hlthaff.2017.0635
+              - generic [ref=e233]: https://doi.org/10.1377/hlthaff.2017.0635
+          - paragraph [ref=e234]:
+            - generic [ref=e235]:
+              - text: McLean, E., Dube, A., Saul, J., Branson, K., Luhanga, M., Mwiba, O., Kalobekamo, F., Geis, S., & Crampin, A. C. (2017). Implementing electronic data capture at a wellestablished health and demographic surveillance site in rural northern Malawi.
+              - emphasis [ref=e236]: Global Health Action
+              - text: ","
+              - emphasis [ref=e237]: "10"
+              - text: (1). https://doi.org/10.1080/16549716.2017.1367162
+          - paragraph [ref=e238]
+          - paragraph [ref=e239]:
+            - strong [ref=e241]: "2016"
+          - paragraph [ref=e242]:
+            - generic [ref=e243]:
+              - text: "Bangura, A. H., Ozonoff, A., Citrin, D., Thapa, P., Nirola, I., Maru, S., Schwarz, R., Raut, A., Belbase, B., Halliday, S., Adhikari, M., & Dr, D. M. (2016). Practical issues in the measurement of child survival in health systems trials: Experience developing a digital community-based mortality surveillance programme in rural Nepal."
+              - emphasis [ref=e244]: BMJ Global Health
+              - text: ","
+              - emphasis [ref=e245]: "1"
+              - text: (4).
+            - link "https://doi.org/10.1136/bmjgh-2016-000050" [ref=e246] [cursor=pointer]:
+              - /url: https://doi.org/10.1136/bmjgh-2016-000050
+              - generic [ref=e247]: https://doi.org/10.1136/bmjgh-2016-000050
+          - paragraph [ref=e248]:
+            - generic [ref=e249]:
+              - text: "Bryce, J. (2016). “Real-Time” Monitoring of Under-Five Mortality: A Vision Tempered by Reality. In"
+              - emphasis [ref=e250]: PLoS medicine
+              - text: (Vol. 13, Issue 1, p. e1001912). PLoS Med.
+            - link "https://doi.org/10.1371/journal.pmed.1001912" [ref=e251] [cursor=pointer]:
+              - /url: https://doi.org/10.1371/journal.pmed.1001912
+              - generic [ref=e252]: https://doi.org/10.1371/journal.pmed.1001912
+          - paragraph [ref=e253]:
+            - generic [ref=e254]:
+              - text: "JJoos, O., Amouzou, A., Silva, R., Banda, B., Park, L., Bryce, J., Kanyuka, M., Baugh, G., Hazel, E., Chimzimu, M., Lajia, K., Makoko, R., & Mleme, T. (2016a). Strengthening community-based vital events reporting for real-time monitoring of under-five mortality: Lessons learned from the Balaka and Salima districts in Malawi."
+              - emphasis [ref=e255]: PLoS ONE
+              - text: ","
+              - emphasis [ref=e256]: "11"
+              - text: (1). https://doi.org/10.1371/journal.pone.0138406
+          - paragraph [ref=e257]:
+            - generic [ref=e258]:
+              - text: "Joos, O., Amouzou, A., Silva, R., Banda, B., Park, L., Bryce, J., Kanyuka, M., Baugh, G., Hazel, E., Chimzimu, M., Lajia, K., Makoko, R., & Mleme, T. (2016b). Strengthening community-based vital events reporting for real-time monitoring of under-five mortality: Lessons learned from the Balaka and Salima districts in Malawi."
+              - emphasis [ref=e259]: PLoS ONE
+              - text: ","
+              - emphasis [ref=e260]: "11"
+              - text: (1). https://doi.org/10.1371/journal.pone.0138406
+          - paragraph [ref=e261]:
+            - generic [ref=e262]:
+              - text: Silva, R., Amouzou, A., Munos, M., Marsh, A., Hazel, E., Victora, C., Black, R., & Bryce, J. (2016). Can Community Health Workers Report Accurately on Births and Deaths? Results of Field Assessments in Ethiopia, Malawi and Mali.
+              - emphasis [ref=e263]: PLOS ONE
+              - text: ","
+              - emphasis [ref=e264]: "11"
+              - text: (1), e0144662. https://doi.org/10.1371/journal.pone.0144662
+          - paragraph [ref=e265]
+          - paragraph [ref=e266]:
+            - strong [ref=e268]: "2015"
+          - paragraph [ref=e269]:
+            - generic [ref=e270]:
+              - text: "Amouzou, A., Kidanu, A., Taddesse, N., Silva, R., Hazel, E., Bryce, J., & Black, R. E. (2015). Using health extension workers for monitoring child mortality in real-time: Validation against household survey data in rural Ethiopia."
+              - emphasis [ref=e271]: PLoS ONE
+              - text: ","
+              - emphasis [ref=e272]: "10"
+              - text: (11).
+            - link "https://doi.org/10.1371/journal.pone.0126909" [ref=e273] [cursor=pointer]:
+              - /url: https://doi.org/10.1371/journal.pone.0126909
+              - generic [ref=e274]: https://doi.org/10.1371/journal.pone.0126909
+          - paragraph [ref=e275]:
+            - generic [ref=e276]:
+              - text: "Kabadi, G. S., Geubbels, E., Lyatuu, I., Smithson, P., Amaro, R., Meku, S., Schellenberg, J. A., & Masanja, H. (2015). Data Resource Profile: The sentinel panel of districts: Tanzania’s national platform for health impact evaluation."
+              - emphasis [ref=e277]: International Journal of Epidemiology
+              - text: ","
+              - emphasis [ref=e278]: "44"
+              - text: (1), 79–86. https://doi.org/10.1093/IJE/DYU223
+          - paragraph [ref=e279]:
+            - generic [ref=e280]:
+              - text: "Munos, M., Koffi, A. K., Sangho, H., Traoré, M. G., Diakité, M., Silva, R., Doumbia, S., Keita, A., Keita, H., Terera, I., Black, R., Bryce, J., Joos, O., Koffi, A., & Wilson, E. (2015). Strengthening community networks for vital event reporting: Community-based reporting of vital events in rural Mali."
+              - emphasis [ref=e281]: PLoS ONE
+              - text: ","
+              - emphasis [ref=e282]: "10"
+              - text: (11). https://doi.org/10.1371/journal.pone.0132164
+          - paragraph [ref=e283]
+          - paragraph [ref=e284]:
+            - strong [ref=e286]: "2014"
+          - paragraph [ref=e287]:
+            - generic [ref=e288]:
+              - text: "Aleksandrowicz, L., Malhotra, V., Dikshit, R., Gupta, P. C., Kumar, R., Sheth, J., Rathi, S. K., Suraweera, W., Miasnikof, P., Jotkar, R., Sinha, D., Awasthi, S., Bhatia, P., & Jha, P. (2014). Performance criteria for verbal autopsy-based systems to estimate national causes of death: Development and application to the Indian Million Death Study."
+              - emphasis [ref=e289]: BMC Medicine
+              - text: ","
+              - emphasis [ref=e290]: "12"
+              - text: (1).
+            - link "https://doi.org/10.1186/1741-7015-12-21" [ref=e291] [cursor=pointer]:
+              - /url: https://doi.org/10.1186/1741-7015-12-21
+              - generic [ref=e292]: https://doi.org/10.1186/1741-7015-12-21
+          - paragraph [ref=e293]:
+            - generic [ref=e294]:
+              - text: ha, P. (2014). Reliable direct measurement of causes of death in low- and middle-income countries.
+              - emphasis [ref=e295]: BMC Medicine
+              - text: ","
+              - emphasis [ref=e296]: "12"
+              - text: (1).
+            - link "https://doi.org/10.1186/1741-7015-12-19" [ref=e297] [cursor=pointer]:
+              - /url: https://doi.org/10.1186/1741-7015-12-19
+              - generic [ref=e298]: https://doi.org/10.1186/1741-7015-12-19
+          - paragraph [ref=e299]:
+            - generic [ref=e300]:
+              - text: "Brinkel, J., Krämer, A., Krumkamp, R., May, J., & Fobil, J. (2014). Mobile phone-based mHealth approaches for public health surveillance in sub-Saharan Africa: a systematic review. In"
+              - emphasis [ref=e301]: International journal of environmental research and public health
+              - text: (Vol. 11, Issue 11, pp. 11559–11582). Int J Environ Res Public Health. https://doi.org/10.3390/ijerph111111559
+          - paragraph [ref=e302]:
+            - generic [ref=e303]:
+              - text: Lewis, G. (2014). The cultural environment behind successful maternal death and morbidity reviews.
+              - emphasis [ref=e304]: "BJOG: An International Journal of Obstetrics & Gynaecology"
+              - text: ","
+              - emphasis [ref=e305]: "121"
+              - text: ", 24–31."
+            - link "https://doi.org/10.1111/1471-0528.12801" [ref=e306] [cursor=pointer]:
+              - /url: https://doi.org/10.1111/1471-0528.12801
+              - generic [ref=e307]: https://doi.org/10.1111/1471-0528.12801
+          - paragraph [ref=e308]
+          - paragraph [ref=e309]:
+            - strong [ref=e311]: "2012"
+          - paragraph [ref=e312]:
+            - generic [ref=e313]:
+              - text: "Liu, L., Johnson, H. L., Cousens, S., Perin, J., Scott, S., Lawn, J. E., Rudan, I., Campbell, H., Cibulskis, R., Li, M., Mathers, C., & Black, R. E. (2012). Global, regional, and national causes of child mortality: An updated systematic analysis for 2010 with time trends since 2000."
+              - emphasis [ref=e314]: The Lancet
+              - text: ","
+              - emphasis [ref=e315]: "379"
+              - text: (9832), 2151–2161.
+            - link "https://doi.org/10.1016/S0140-6736(12)60560-1" [ref=e316] [cursor=pointer]:
+              - /url: https://doi.org/10.1016/S0140-6736(12)60560-1
+              - generic [ref=e317]: https://doi.org/10.1016/S0140-6736(12)60560-1
+          - paragraph [ref=e318]
+          - paragraph [ref=e319]:
+            - strong [ref=e321]: "2011"
+          - paragraph [ref=e322]:
+            - generic [ref=e323]:
+              - text: "Mudenda, S. S., Kamocha, S., Mswia, R., Conkling, M., Sikanyiti, P., Potter, D., Mayaka, W. C., & Marx, M. A. (2011). Feasibility of using a World Health Organization-standard methodology for Sample Vital Registration with Verbal Autopsy (SAVVY) to report leading causes of death in Zambia: Results of a pilot in four provinces, 2010."
+              - emphasis [ref=e324]: Population Health Metrics
+              - text: ","
+              - emphasis [ref=e325]: "9"
+              - text: (1), 1–9. https://doi.org/10.1186/1478-7954-9-40/FIGURES/3
+          - paragraph [ref=e326]
+          - paragraph [ref=e327]:
+            - strong [ref=e329]: "2010"
+          - paragraph [ref=e330]:
+            - generic [ref=e331]:
+              - text: "Qomariyah, S. N., Braunholtz, D., Achadi, E. L., Witten, K. H., Pambudi, E. S., Anggondowati, T., Latief, K., & Graham, W. J. (2010). An option for measuring maternal mortality in developing countries: A survey using community informants."
+              - emphasis [ref=e332]: BMC Pregnancy and Childbirth
+              - text: ","
+              - emphasis [ref=e333]: "10"
+              - text: . https://doi.org/10.1186/1471-2393-10-74
+          - paragraph [ref=e334]
+          - paragraph [ref=e335]:
+            - strong [ref=e337]: "2005"
+          - paragraph [ref=e338]:
+            - generic [ref=e339]:
+              - text: "Setel, P. W., Sankoh, O., Rao, C., Velkoff, V. A., Mathers, C., Gonghuan, Y., Hemed, Y., Jha, P., & Lopez, A. D. (2005). Sample registration of vital events with verbal autopsy: A renewed commitment to measuring and monitoring vital statistics. In"
+              - emphasis [ref=e340]: Bulletin of the World Health Organization
+              - text: (Vol. 83, Issue 8, pp. 611–617). World Health Organization.
+            - link "https://doi.org//S0042-96862005000800015" [ref=e341] [cursor=pointer]:
+              - /url: https://doi.org/S0042-96862005000800015
+              - generic [ref=e342]: https://doi.org//S0042-96862005000800015
+          - paragraph [ref=e343]:
+            - generic [ref=e344]:
+              - text: "Yang, G., Hu, J., Rao, K. Q., Ma, J., Rao, C., & Lopez, A. D. (2005). Mortality registration and surveillance in China: History, current situation and challenges."
+              - emphasis [ref=e345]: Population Health Metrics
+              - text: ","
+              - emphasis [ref=e346]: "3"
+              - text: (1), 1–9. https://doi.org/10.1186/1478-7954-3-3/TABLES/4
+      - generic [ref=e352]:
+        - generic [ref=e365]:
+          - heading "Sign up for the Newsletter." [level=2] [ref=e366]
+          - paragraph [ref=e367]:
+            - emphasis [ref=e368]: Join our mailing list to receive periodic updates on VIVA’s work and helpful tips about best practices and new resources.
+        - generic [ref=e374]:
+          - generic [ref=e375]:
+            - group "Name" [ref=e376]:
+              - generic [ref=e380]: Name
+              - generic [ref=e381]:
+                - generic [ref=e384]:
+                  - text: First Name
+                  - generic [ref=e385]: (required)
+                - textbox "First Name (required)" [ref=e386]
+              - generic [ref=e387]:
+                - generic [ref=e390]:
+                  - text: Last Name
+                  - generic [ref=e391]: (required)
+                - textbox "Last Name (required)" [ref=e392]
+            - generic [ref=e393]:
+              - generic [ref=e396] [cursor=pointer]:
+                - generic [ref=e397]: Email
+                - generic [ref=e398]: (required)
+              - textbox "Email (required)" [ref=e399]:
+                - /placeholder: ""
+            - generic:
+              - textbox
+          - button "Submit" [ref=e401] [cursor=pointer]
+      - generic [ref=e407]:
+        - generic [ref=e412]:
+          - heading "Receive a Link to the Tools" [level=2] [ref=e413]
+          - paragraph [ref=e414]: Start implementing the VIVA program in your country? This step-by-step guide and set of tools will give you everything you need to successfully track mortality data and its causes and empower you to take meaningful action to prevent deaths and improve the health of your community. Just complete this form and you will receive a link by email. If for some reason you do not receive the link within a few minutes, please email us directly at viva@jh.edu.
+        - generic [ref=e419]:
+          - paragraph [ref=e422]: Sign up with your email address to receive a direct link to the Tools & 12-step VIVA Guide.
+          - generic [ref=e423]:
+            - generic [ref=e424]:
+              - group [ref=e425]:
+                - textbox "First Name" [ref=e427]
+                - textbox "Last Name" [ref=e429]
+              - textbox "Email Address" [ref=e431]
+            - button "GET THE TOOLS NOW!" [ref=e433] [cursor=pointer]: GET THE TOOLS NOW!
+          - paragraph [ref=e435]
+  - contentinfo [ref=e436]:
+    - generic [ref=e442]:
+      - paragraph [ref=e455]:
+        - strong [ref=e456]: Contact
+        - link "viva@jh.edu" [ref=e457] [cursor=pointer]:
+          - /url: mailto:viva@jh.edu?subject=Website%20Inquiry
+      - paragraph [ref=e463]:
+        - strong [ref=e464]: Links
+        - link "About VIVA" [ref=e465] [cursor=pointer]:
+          - /url: /about-viva
+        - link "Process" [ref=e466] [cursor=pointer]:
+          - /url: /process
+        - link "Blog" [ref=e467] [cursor=pointer]:
+          - /url: /blog
+        - link "Publication" [ref=e468] [cursor=pointer]:
+          - /url: /publications
+        - link "Contact us" [ref=e469] [cursor=pointer]:
+          - /url: /contact
+      - heading "Sign up for the Newsletter" [level=3] [ref=e475]
+      - generic [ref=e481]:
+        - generic [ref=e482]:
+          - group "Name" [ref=e483]:
+            - generic [ref=e487]: Name
+            - generic [ref=e488]:
+              - generic [ref=e491]:
+                - text: First Name
+                - generic [ref=e492]: (required)
+              - textbox "First Name (required)" [ref=e493]
+            - generic [ref=e494]:
+              - generic [ref=e497]:
+                - text: Last Name
+                - generic [ref=e498]: (required)
+              - textbox "Last Name (required)" [ref=e499]
+          - generic [ref=e500]:
+            - generic [ref=e503] [cursor=pointer]:
+              - generic [ref=e504]: Email
+              - generic [ref=e505]: (required)
+            - textbox "Email (required)" [ref=e506]:
+              - /placeholder: ""
+          - generic:
+            - textbox
+        - button "Submit" [ref=e508] [cursor=pointer]

@@ -24,6 +24,7 @@ api = NinjaAPI(csrf=True)
 # Schemas
 # ──────────────────────────────────────────────
 
+
 class AuthSchema(Schema):
     username: str
     password: str
@@ -66,7 +67,11 @@ class DeathOut(Schema):
             id=death.id,
             death_code=death.death_code,
             death_status=death.death_status,
-            death_status_label=Death.DeathStatus(death.death_status).label if death.death_status is not None else None,
+            death_status_label=(
+                Death.DeathStatus(death.death_status).label
+                if death.death_status is not None
+                else None
+            ),
             deceased_name=death.deceased_name,
             deceased_sex=death.deceased_sex,
             deceased_dob=death.deceased_dob,
@@ -160,7 +165,11 @@ class PregnancyOutcomeOut(Schema):
             mother_name=event.mother_name,
             mother_age_years=event.mother_age_years,
             birth_sing_outcome=event.birth_sing_outcome,
-            birth_sing_outcome_label=Event.BirthOutcomeType(event.birth_sing_outcome).label if event.birth_sing_outcome is not None else None,
+            birth_sing_outcome_label=(
+                Event.BirthOutcomeType(event.birth_sing_outcome).label
+                if event.birth_sing_outcome is not None
+                else None
+            ),
             birth_multi=event.birth_multi,
             birth_multi_alive=event.birth_multi_alive,
             birth_multi_still=event.birth_multi_still,
@@ -240,7 +249,11 @@ class HouseholdOut(Schema):
                     sex=m.sex,
                     age_in_years=m.age_in_years,
                     rel_head=m.rel_head,
-                    rel_head_label=HouseholdMember.RelationHeadType(m.rel_head).label if m.rel_head is not None else None,
+                    rel_head_label=(
+                        HouseholdMember.RelationHeadType(m.rel_head).label
+                        if m.rel_head is not None
+                        else None
+                    ),
                 )
                 for m in h.household_members.all()
             ],
@@ -265,6 +278,7 @@ class DashboardStatOut(Schema):
 # Auth endpoints
 # ──────────────────────────────────────────────
 
+
 @api.post("/auth/login")
 def login_view(request, payload: AuthSchema):
     user = authenticate(request, username=payload.username, password=payload.password)
@@ -286,8 +300,12 @@ def get_user(request):
     get_token(request)  # Ensure CSRF cookie is set
     if request.user.is_authenticated:
         permissions = {
-            "can_schedule_va": Permissions.has_permission(request.user, Permissions.Codes.SCHEDULE_VA),
-            "can_view_all_provinces": Permissions.has_permission(request.user, Permissions.Codes.VIEW_ALL_PROVINCES),
+            "can_schedule_va": Permissions.has_permission(
+                request.user, Permissions.Codes.SCHEDULE_VA
+            ),
+            "can_view_all_provinces": Permissions.has_permission(
+                request.user, Permissions.Codes.VIEW_ALL_PROVINCES
+            ),
         }
         return {
             "is_authenticated": True,
@@ -303,31 +321,40 @@ def get_user(request):
 # Province endpoints
 # ──────────────────────────────────────────────
 
+
 @api.get("/provinces", auth=django_auth, response=list[ProvinceOut])
 def list_provinces(request):
-    return Province.objects.for_user(request.user).order_by('name')
+    return Province.objects.for_user(request.user).order_by("name")
 
 
 # ──────────────────────────────────────────────
 # Staff endpoints
 # ──────────────────────────────────────────────
 
+
 @api.get("/staff", auth=django_auth, response=list[StaffOut])
-def list_staff(request, province_id: Optional[int] = None, staff_type: Optional[str] = None):
+def list_staff(
+    request, province_id: Optional[int] = None, staff_type: Optional[str] = None
+):
     qs = Staff.objects.all()
     if province_id:
         qs = qs.filter(province_id=province_id)
     if staff_type:
         qs = qs.filter(staff_type=staff_type)
-    return qs.order_by('full_name')
+    return qs.order_by("full_name")
 
 
 # ──────────────────────────────────────────────
 # Death endpoints
 # ──────────────────────────────────────────────
 
-def _filter_deaths(status=None, province_id=None, start_date=None, end_date=None, q=None):
-    qs = Death.objects.select_related('event', 'event__cluster', 'event__area', 'event__event_staff', 'va_staff')
+
+def _filter_deaths(
+    status=None, province_id=None, start_date=None, end_date=None, q=None
+):
+    qs = Death.objects.select_related(
+        "event", "event__cluster", "event__area", "event__event_staff", "va_staff"
+    )
 
     if status is not None:
         qs = qs.filter(death_status=status)
@@ -336,7 +363,10 @@ def _filter_deaths(status=None, province_id=None, start_date=None, end_date=None
         qs = qs.filter(event__cluster__province_id=province_id)
 
     if start_date and end_date:
-        qs = qs.filter(deceased_dod__gte=parse_date(start_date), deceased_dod__lte=parse_date(end_date))
+        qs = qs.filter(
+            deceased_dod__gte=parse_date(start_date),
+            deceased_dod__lte=parse_date(end_date),
+        )
     elif start_date:
         qs = qs.filter(deceased_dod__gte=parse_date(start_date))
     elif end_date:
@@ -345,11 +375,10 @@ def _filter_deaths(status=None, province_id=None, start_date=None, end_date=None
     if q and q.strip():
         query = q.strip()
         qs = qs.filter(
-            Q(death_code__icontains=query) |
-            Q(event__area__code__icontains=query)
+            Q(death_code__icontains=query) | Q(event__area__code__icontains=query)
         )
 
-    return qs.order_by('-id')
+    return qs.order_by("-id")
 
 
 @api.get("/deaths", auth=django_auth, response=PaginatedDeathsOut)
@@ -398,45 +427,73 @@ def export_deaths(
 
     if is_completed:
         ws.title = "Completed Deaths"
-        ws.append(["Death ID", "Work Area/District", "Cluster", "Worker", "Deceased Name",
-                    "Date of Death", "Household ID", "VA Interviewer", "VA Date", "VA Submitted"])
+        ws.append(
+            [
+                "Death ID",
+                "Work Area/District",
+                "Cluster",
+                "Worker",
+                "Deceased Name",
+                "Date of Death",
+                "Household ID",
+                "VA Interviewer",
+                "VA Date",
+                "VA Submitted",
+            ]
+        )
     else:
         ws.title = "Deaths"
-        ws.append(["Death ID", "Work Area/District", "Cluster", "Worker", "Deceased Name",
-                    "Date of Death", "Household ID", "HH Head Name", "Respondent",
-                    "VA Date Requested", "Submission Date"])
+        ws.append(
+            [
+                "Death ID",
+                "Work Area/District",
+                "Cluster",
+                "Worker",
+                "Deceased Name",
+                "Date of Death",
+                "Household ID",
+                "HH Head Name",
+                "Respondent",
+                "VA Date Requested",
+                "Submission Date",
+            ]
+        )
 
     for death in qs:
         event = death.event
         event_staff = event.event_staff
         va_staff = death.va_staff
         if is_completed:
-            ws.append([
-                death.death_code or "",
-                event.area_code or "",
-                event.cluster_code or "",
-                event_staff.full_name if event_staff else "",
-                death.deceased_name or "",
-                str(death.deceased_dod) if death.deceased_dod else "",
-                event.household_code or "",
-                va_staff.full_name if va_staff else "",
-                str(death.va_scheduled_date) if death.va_scheduled_date else "",
-                str(death.va_completed_date) if death.va_completed_date else "",
-            ])
+            ws.append(
+                [
+                    death.death_code or "",
+                    event.area_code or "",
+                    event.cluster_code or "",
+                    event_staff.full_name if event_staff else "",
+                    death.deceased_name or "",
+                    str(death.deceased_dod) if death.deceased_dod else "",
+                    event.household_code or "",
+                    va_staff.full_name if va_staff else "",
+                    str(death.va_scheduled_date) if death.va_scheduled_date else "",
+                    str(death.va_completed_date) if death.va_completed_date else "",
+                ]
+            )
         else:
-            ws.append([
-                death.death_code or "",
-                event.area_code or "",
-                event.cluster_code or "",
-                event_staff.full_name if event_staff else "",
-                death.deceased_name or "",
-                str(death.deceased_dod) if death.deceased_dod else "",
-                event.household_code or "",
-                event.household_head_name or "",
-                event.respondent_name or "",
-                str(death.va_proposed_date) if death.va_proposed_date else "",
-                str(event.submission_date) if event.submission_date else "",
-            ])
+            ws.append(
+                [
+                    death.death_code or "",
+                    event.area_code or "",
+                    event.cluster_code or "",
+                    event_staff.full_name if event_staff else "",
+                    death.deceased_name or "",
+                    str(death.deceased_dod) if death.deceased_dod else "",
+                    event.household_code or "",
+                    event.household_head_name or "",
+                    event.respondent_name or "",
+                    str(death.va_proposed_date) if death.va_proposed_date else "",
+                    str(event.submission_date) if event.submission_date else "",
+                ]
+            )
 
     buf = BytesIO()
     wb.save(buf)
@@ -448,24 +505,30 @@ def export_deaths(
         buf.getvalue(),
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
-    response["Content-Disposition"] = f'attachment; filename="deaths_{status_label}_{today}.xlsx"'
+    response["Content-Disposition"] = (
+        f'attachment; filename="deaths_{status_label}_{today}.xlsx"'
+    )
     return response
 
 
 @api.get("/deaths/{death_id}", auth=django_auth, response=DeathOut)
 def get_death(request, death_id: int):
     death = Death.objects.select_related(
-        'event', 'event__cluster', 'event__area', 'event__event_staff', 'va_staff'
+        "event", "event__cluster", "event__area", "event__event_staff", "va_staff"
     ).get(id=death_id)
     return DeathOut.from_death(death)
 
 
 @api.put("/deaths/{death_id}", auth=django_auth)
 def update_death(request, death_id: int, payload: DeathUpdateSchema):
-    death = Death.objects.select_related('event').get(id=death_id)
+    death = Death.objects.select_related("event").get(id=death_id)
 
     if death.death_status == Death.DeathStatus.VA_COMPLETED:
-        return api.create_response(request, {"success": False, "message": "Cannot edit a completed VA."}, status=400)
+        return api.create_response(
+            request,
+            {"success": False, "message": "Cannot edit a completed VA."},
+            status=400,
+        )
 
     if payload.va_scheduled_date is not None:
         death.va_scheduled_date = payload.va_scheduled_date
@@ -485,18 +548,24 @@ def update_death(request, death_id: int, payload: DeathUpdateSchema):
 # Pregnancy Outcome endpoints
 # ──────────────────────────────────────────────
 
-def _filter_pregnancy_outcomes(province_id=None, start_date=None, end_date=None, q=None):
-    qs = Event.objects.filter(
-        event_type=Event.EventType.PREGNANCY_OUTCOME
-    ).select_related(
-        'cluster', 'area', 'event_staff'
-    ).prefetch_related('babies')
+
+def _filter_pregnancy_outcomes(
+    province_id=None, start_date=None, end_date=None, q=None
+):
+    qs = (
+        Event.objects.filter(event_type=Event.EventType.PREGNANCY_OUTCOME)
+        .select_related("cluster", "area", "event_staff")
+        .prefetch_related("babies")
+    )
 
     if province_id:
         qs = qs.filter(cluster__province_id=province_id)
 
     if start_date and end_date:
-        qs = qs.filter(preg_outcome_date__gte=parse_date(start_date), preg_outcome_date__lte=parse_date(end_date))
+        qs = qs.filter(
+            preg_outcome_date__gte=parse_date(start_date),
+            preg_outcome_date__lte=parse_date(end_date),
+        )
     elif start_date:
         qs = qs.filter(preg_outcome_date__gte=parse_date(start_date))
     elif end_date:
@@ -505,14 +574,15 @@ def _filter_pregnancy_outcomes(province_id=None, start_date=None, end_date=None,
     if q and q.strip():
         query = q.strip()
         qs = qs.filter(
-            Q(cluster_code__icontains=query) |
-            Q(mother_name__icontains=query)
+            Q(cluster_code__icontains=query) | Q(mother_name__icontains=query)
         )
 
-    return qs.order_by('-id')
+    return qs.order_by("-id")
 
 
-@api.get("/pregnancy-outcomes", auth=django_auth, response=PaginatedPregnancyOutcomesOut)
+@api.get(
+    "/pregnancy-outcomes", auth=django_auth, response=PaginatedPregnancyOutcomesOut
+)
 def list_pregnancy_outcomes(
     request,
     province_id: Optional[int] = None,
@@ -552,34 +622,56 @@ def export_pregnancy_outcomes(
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Pregnancy Outcomes"
-    ws.append(["Key", "Cluster Code", "Work Area", "Outcome Date", "Mother Name", "Baby Count", "Outcome Type"])
+    ws.append(
+        [
+            "Key",
+            "Cluster Code",
+            "Work Area",
+            "Outcome Date",
+            "Mother Name",
+            "Live Birth Count",
+            "Outcome Type",
+        ]
+    )
 
-    ws_babies = wb.create_sheet("Babies")
+    ws_babies = wb.create_sheet("Live Births")
     ws_babies.append(["Key", "Name", "Sex", "Outcome Date", "Weight", "Registered"])
 
     sex_map = {1: "Male", 2: "Female"}
 
     for event in qs:
-        outcome_label = Event.BirthOutcomeType(event.birth_sing_outcome).label if event.birth_sing_outcome is not None else ""
+        outcome_label = (
+            Event.BirthOutcomeType(event.birth_sing_outcome).label
+            if event.birth_sing_outcome is not None
+            else ""
+        )
         baby_count = event.babies.count()
-        ws.append([
-            event.id,
-            event.cluster_code or "",
-            event.area_code or "",
-            str(event.preg_outcome_date) if event.preg_outcome_date else "",
-            event.mother_name or "",
-            baby_count,
-            outcome_label,
-        ])
-        for baby in event.babies.all():
-            ws_babies.append([
+        ws.append(
+            [
                 event.id,
-                baby.name or "",
-                sex_map.get(baby.sex, ""),
-                str(baby.preg_outcome_date) if baby.preg_outcome_date else "",
-                baby.weight if baby.weight is not None else "",
-                "Yes" if baby.is_birth_registered else "No" if baby.is_birth_registered is not None else "",
-            ])
+                event.cluster_code or "",
+                event.area_code or "",
+                str(event.preg_outcome_date) if event.preg_outcome_date else "",
+                event.mother_name or "",
+                baby_count,
+                outcome_label,
+            ]
+        )
+        for baby in event.babies.all():
+            ws_babies.append(
+                [
+                    event.id,
+                    baby.name or "",
+                    sex_map.get(baby.sex, ""),
+                    str(baby.preg_outcome_date) if baby.preg_outcome_date else "",
+                    baby.weight if baby.weight is not None else "",
+                    (
+                        "Yes"
+                        if baby.is_birth_registered
+                        else "No" if baby.is_birth_registered is not None else ""
+                    ),
+                ]
+            )
 
     buf = BytesIO()
     wb.save(buf)
@@ -590,23 +682,29 @@ def export_pregnancy_outcomes(
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
     today = date.today().strftime("%Y-%m-%d")
-    response["Content-Disposition"] = f'attachment; filename="pregnancy_outcomes_{today}.xlsx"'
+    response["Content-Disposition"] = (
+        f'attachment; filename="pregnancy_outcomes_{today}.xlsx"'
+    )
     return response
 
 
-@api.get("/pregnancy-outcomes/{event_id}", auth=django_auth, response=PregnancyOutcomeOut)
+@api.get(
+    "/pregnancy-outcomes/{event_id}", auth=django_auth, response=PregnancyOutcomeOut
+)
 def get_pregnancy_outcome(request, event_id: int):
-    event = Event.objects.filter(
-        event_type=Event.EventType.PREGNANCY_OUTCOME
-    ).select_related(
-        'cluster', 'area', 'event_staff'
-    ).prefetch_related('babies').get(id=event_id)
+    event = (
+        Event.objects.filter(event_type=Event.EventType.PREGNANCY_OUTCOME)
+        .select_related("cluster", "area", "event_staff")
+        .prefetch_related("babies")
+        .get(id=event_id)
+    )
     return PregnancyOutcomeOut.from_event(event)
 
 
 # ──────────────────────────────────────────────
 # Household endpoints
 # ──────────────────────────────────────────────
+
 
 @api.get("/households", auth=django_auth, response=PaginatedHouseholdsOut)
 def list_households(
@@ -619,14 +717,17 @@ def list_households(
     page_size: int = 10,
 ):
     qs = Household.objects.select_related(
-        'cluster', 'area', 'event_staff'
-    ).prefetch_related('household_members')
+        "cluster", "area", "event_staff"
+    ).prefetch_related("household_members")
 
     if province_id:
         qs = qs.filter(cluster__province_id=province_id)
 
     if start_date and end_date:
-        qs = qs.filter(interview_date__gte=parse_date(start_date), interview_date__lte=parse_date(end_date))
+        qs = qs.filter(
+            interview_date__gte=parse_date(start_date),
+            interview_date__lte=parse_date(end_date),
+        )
     elif start_date:
         qs = qs.filter(interview_date__gte=parse_date(start_date))
     elif end_date:
@@ -635,11 +736,10 @@ def list_households(
     if q and q.strip():
         query = q.strip()
         qs = qs.filter(
-            Q(household_code__icontains=query) |
-            Q(cluster_code__icontains=query)
+            Q(household_code__icontains=query) | Q(cluster_code__icontains=query)
         )
 
-    qs = qs.order_by('-id')
+    qs = qs.order_by("-id")
 
     paginator = Paginator(qs, page_size)
     try:
@@ -658,9 +758,11 @@ def list_households(
 
 @api.get("/households/{household_id}", auth=django_auth, response=HouseholdOut)
 def get_household(request, household_id: int):
-    h = Household.objects.select_related(
-        'cluster', 'area', 'event_staff'
-    ).prefetch_related('household_members').get(id=household_id)
+    h = (
+        Household.objects.select_related("cluster", "area", "event_staff")
+        .prefetch_related("household_members")
+        .get(id=household_id)
+    )
     return HouseholdOut.from_household(h)
 
 
@@ -668,9 +770,11 @@ def get_household(request, household_id: int):
 # Dashboard endpoints
 # ──────────────────────────────────────────────
 
+
 @api.get("/dashboard-stats", auth=django_auth, response=list[DashboardStatOut])
 def get_dashboard_stats(request):
     from django.db import connection
+
     with connection.cursor() as cursor:
         cursor.execute("SELECT metric, province_id, count FROM dashboard_stats")
         rows = cursor.fetchall()

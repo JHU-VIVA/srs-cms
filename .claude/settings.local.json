@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/c/code/repos/srs-cms/.venv/Scripts/pytest.exe:*)",
+      "Bash(curl -sL \"https://images.squarespace-cdn.com/content/v1/67d2e0aa0061f172552e7964/0fa1795d-c1b3-4989-8c14-79d33ee1e5f1/VIVA_Log_FINAL-White_notag.png\" -o frontend/public/viva-logo-dark.png)",
+      "WebFetch(domain:viva.jhuhost.org)",
+      "Bash(npx tsc:*)",
+      "mcp__plugin_playwright_playwright__browser_run_code",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_resize",
+      "mcp__plugin_playwright_playwright__browser_fill_form"
+    ]
+  }
+}

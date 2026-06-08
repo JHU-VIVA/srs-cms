@@ -1,0 +1,15 @@
+- generic [ref=e6]:
+  - img "VIVA" [ref=e8]
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - heading "Welcome" [level=2] [ref=e11]
+      - paragraph [ref=e12]: Sign in to SRS-CMS
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - generic [ref=e15]: Username
+          - textbox [ref=e16]
+        - generic [ref=e17]:
+          - generic [ref=e18]: Password
+          - textbox [ref=e19]
+        - button "Sign In" [ref=e20] [cursor=pointer]
+  - paragraph [ref=e22]: VIVA SRS-CMS
