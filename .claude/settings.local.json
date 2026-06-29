@@ -10,7 +10,8 @@
       "mcp__plugin_playwright_playwright__browser_take_screenshot",
       "mcp__plugin_playwright_playwright__browser_navigate",
       "mcp__plugin_playwright_playwright__browser_resize",
-      "mcp__plugin_playwright_playwright__browser_fill_form"
+      "mcp__plugin_playwright_playwright__browser_fill_form",
+      "PowerShell(Start-Sleep 3; $urls = @\\('http://localhost:8000/', 'http://localhost:8000/admin/', 'http://localhost:8000/api/docs'\\); foreach \\($u in $urls\\) { try { $r = Invoke-WebRequest -Uri $u -UseBasicParsing -MaximumRedirection 0 -ErrorAction Stop; Write-Output \"$u -> $\\($r.StatusCode\\)\" } catch { Write-Output \"$u -> $\\($_.Exception.Response.StatusCode.value__\\)\" } })"
     ]
   }
 }

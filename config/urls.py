@@ -21,4 +21,5 @@ from api.api import api
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', api.urls),
+    path('__reload__/', include('django_browser_reload.urls')),
 ]
